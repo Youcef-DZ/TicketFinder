@@ -14,7 +14,6 @@ import java.util.Properties;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
-import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JCheckBox;
 
 public class SearchPanel extends JPanel {
