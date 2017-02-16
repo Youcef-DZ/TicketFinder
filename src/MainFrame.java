@@ -1,12 +1,13 @@
 
-import javax.swing.*;
-
 import java.awt.Dimension;
 
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.UIManager;
+import javax.swing.WindowConstants;
+
 public class MainFrame extends JFrame {
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = 1L;
 
 	public MainFrame() {
@@ -14,8 +15,6 @@ public class MainFrame extends JFrame {
 	add(searchPnl);
 	
 	setPreferredSize(new Dimension(800,600));// changed it to preferredSize, Thanks!
-
-
 
 		setTitle("Ticket Finder");
 		pack();

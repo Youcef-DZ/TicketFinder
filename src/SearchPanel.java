@@ -17,9 +17,7 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
 public class SearchPanel extends JPanel {
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 
 	private JTextField fromTextField;

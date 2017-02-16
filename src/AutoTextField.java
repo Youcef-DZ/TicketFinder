@@ -17,9 +17,6 @@ class AutoTextField extends JTextField {
 
 	class AutoDocument extends PlainDocument {
 
-		/**
-		 * 
-		 */
 		private static final long serialVersionUID = 1L;
 
 		public void replace(int i, int j, String s, AttributeSet attributeset) throws BadLocationException {
