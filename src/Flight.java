@@ -5,16 +5,50 @@
 
 public class Flight {
 	private int flightNumber;
-	private int price;
+	private String price;
 	private String airLine;
 	private String origin;
 	private String destination;
 	private String originTerminal;
 	private String destinationTerminal;
-	private long departureTime;
-	private long arrivalTime;
-	private long duration;
+	private String departureTime;
+	private String arrivalTime;
+	private int duration;
 	private int mileage;
+	
+	public Flight(){
+		
+	}
+	
+	/**
+	 * @param flightNumber
+	 * @param price
+	 * @param airLine
+	 * @param origin
+	 * @param destination
+	 * @param originTerminal
+	 * @param destinationTerminal
+	 * @param departureTime
+	 * @param arrivalTime
+	 * @param duration
+	 * @param millage
+	 */
+	public Flight(int flightNumber, String price, String airLine, String origin, String destination, String originTerminal,
+			String destinationTerminal, String departureTime, String arrivalTime, int duration, int mileage) {
+		
+		this.flightNumber = flightNumber;
+		this.price = price;
+		this.airLine = airLine;
+		this.origin = origin;
+		this.destination = destination;
+		this.originTerminal = originTerminal;
+		this.destinationTerminal = destinationTerminal;
+		this.departureTime = departureTime;
+		this.arrivalTime = arrivalTime;
+		this.duration = duration;
+		this.mileage = mileage;
+
+	}
 	
 	/**
 	 * @return the flightNumber
@@ -33,15 +67,15 @@ public class Flight {
 	/**
 	 * @return the price
 	 */
-	public int getPrice() {
+	public String getPrice() {
 		return price;
 	}
 
 	/**
-	 * @param price the price to set
+	 * @param price2 the price to set
 	 */
-	public void setPrice(int price) {
-		this.price = price;
+	public void setPrice(String price2) {
+		this.price = price2;
 	}
 
 	/**
@@ -117,42 +151,42 @@ public class Flight {
 	/**
 	 * @return the departureTime
 	 */
-	public long getDepartureTime() {
+	public String getDepartureTime() {
 		return departureTime;
 	}
 
 	/**
-	 * @param departureTime the departureTime to set
+	 * @param departureTime2 the departureTime to set
 	 */
-	public void setDepartureTime(long departureTime) {
-		this.departureTime = departureTime;
+	public void setDepartureTime(String departureTime2) {
+		this.departureTime = departureTime2;
 	}
 
 	/**
 	 * @return the arrivalTime
 	 */
-	public long getArrivalTime() {
+	public String getArrivalTime() {
 		return arrivalTime;
 	}
 
 	/**
-	 * @param arrivalTime the arrivalTime to set
+	 * @param arrivalTime2 the arrivalTime to set
 	 */
-	public void setArrivalTime(long arrivalTime) {
-		this.arrivalTime = arrivalTime;
+	public void setArrivalTime(String arrivalTime2) {
+		this.arrivalTime = arrivalTime2;
 	}
 
 	/**
 	 * @return the duration
 	 */
-	public long getDuration() {
+	public int getDuration() {
 		return duration;
 	}
 
 	/**
 	 * @param duration the duration to set
 	 */
-	public void setDuration(long duration) {
+	public void setDuration(int duration) {
 		this.duration = duration;
 	}
 
@@ -169,37 +203,4 @@ public class Flight {
 	public void setMileage(int mileage) {
 		this.mileage = mileage;
 	}
-
-	/**
-	 * Default constructor
-	 * 
-	 * @param flightNumber
-	 * @param price
-	 * @param airLine
-	 * @param origin
-	 * @param destination
-	 * @param originTerminal
-	 * @param destinationTerminal
-	 * @param departureTime
-	 * @param arrivalTime
-	 * @param duration
-	 * @param millage
-	 */
-	public Flight(int flightNumber, int price, String airLine, String origin, String destination, String originTerminal,
-			String destinationTerminal, long departureTime, long arrivalTime, long duration, int mileage) {
-		
-		this.flightNumber = flightNumber;
-		this.price = price;
-		this.airLine = airLine;
-		this.origin = origin;
-		this.destination = destination;
-		this.originTerminal = originTerminal;
-		this.destinationTerminal = destinationTerminal;
-		this.departureTime = departureTime;
-		this.arrivalTime = arrivalTime;
-		this.duration = duration;
-		this.mileage = mileage;
-
-	}
-
 }

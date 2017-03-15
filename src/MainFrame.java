@@ -26,8 +26,7 @@ public class MainFrame extends JFrame {
 			public void run() {
 				try {
 					UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
-					// "com.sun.java.swing.plaf.motif.MotifLookAndFeel");
-					// UIManager.getCrossPlatformLookAndFeelClassName());
+				
 				} catch (Exception ex) {
 					ex.printStackTrace();
 				}

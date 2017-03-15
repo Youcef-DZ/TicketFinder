@@ -96,7 +96,7 @@ class AutoTextField extends JTextField {
 
 	private void init() {
 		setDocument(new AutoDocument());
-		
+
 	}
 
 	private String getMatch(String s) {
