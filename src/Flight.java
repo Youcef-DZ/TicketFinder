@@ -72,10 +72,10 @@ public class Flight {
 	}
 
 	/**
-	 * @param price2 the price to set
+	 * @param price the price to set
 	 */
-	public void setPrice(String price2) {
-		this.price = price2;
+	public void setPrice(String price) {
+		this.price = price;
 	}
 
 	/**
@@ -156,10 +156,10 @@ public class Flight {
 	}
 
 	/**
-	 * @param departureTime2 the departureTime to set
+	 * @param departureTime the departureTime to set
 	 */
-	public void setDepartureTime(String departureTime2) {
-		this.departureTime = departureTime2;
+	public void setDepartureTime(String departureTime) {
+		this.departureTime = departureTime;
 	}
 
 	/**
@@ -170,10 +170,10 @@ public class Flight {
 	}
 
 	/**
-	 * @param arrivalTime2 the arrivalTime to set
+	 * @param arrivalTime the arrivalTime to set
 	 */
-	public void setArrivalTime(String arrivalTime2) {
-		this.arrivalTime = arrivalTime2;
+	public void setArrivalTime(String arrivalTime) {
+		this.arrivalTime = arrivalTime;
 	}
 
 	/**
