@@ -41,7 +41,7 @@ public class Search {
 	private int seniorCount;
 	private int maxStops;
 	private int maxConnectionDuration; // The longest connection between two legs, in minutes
-	//private int solutions; // he number of solutions to return, maximum 500
+	private int solutions; // he number of solutions to return, maximum 500
 	private String[] permittedCarrier; // A list of 2-letter IATA airline designators.
 	private String[] prohibitedCarrier; // A list of 2-letter IATA airline designators. Exclude slices that use these carriers.
 	private String preferredCabin; // Allowed values are COACH, PREMIUM_COACH, BUSINESS, and FIRST.
@@ -145,132 +145,6 @@ public class Search {
 	 */
 	public void setDepartureDate(String departureDate) {
 		this.departureDate = departureDate;
-	}
-	
-	/**
-	 * @return the maxPrice
-	 */
-	public int getMaxPrice() {
-		return maxPrice;
-	}
-
-	/**
-	 * @param maxPrice the maxPrice to set
-	 */
-	public void setMaxPrice(int maxPrice) {
-		this.maxPrice = maxPrice;
-	}
-
-	/**
-	 * @return the adultCount
-	 */
-	public int getAdultCount() {
-		return adultCount;
-	}
-
-	/**
-	 * @param adultCount the adultCount to set
-	 */
-	public void setAdultCount(int adultCount) {
-		this.adultCount = adultCount;
-	}
-
-	/**
-	 * @return the childCount
-	 */
-	public int getChildCount() {
-		return childCount;
-	}
-
-	/**
-	 * @param childCount the childCount to set
-	 */
-	public void setChildCount(int childCount) {
-		this.childCount = childCount;
-	}
-
-	/**
-	 * @return the seniorCount
-	 */
-	public int getSeniorCount() {
-		return seniorCount;
-	}
-
-	/**
-	 * @param seniorCount the seniorCount to set
-	 */
-	public void setSeniorCount(int seniorCount) {
-		this.seniorCount = seniorCount;
-	}
-
-	/**
-	 * @return the maxStops
-	 */
-	public int getMaxStops() {
-		return maxStops;
-	}
-
-	/**
-	 * @param maxStops the maxStops to set
-	 */
-	public void setMaxStops(int maxStops) {
-		this.maxStops = maxStops;
-	}
-
-	/**
-	 * @return the maxConnectionDuration
-	 */
-	public int getMaxConnectionDuration() {
-		return maxConnectionDuration;
-	}
-
-	/**
-	 * @param maxConnectionDuration the maxConnectionDuration to set
-	 */
-	public void setMaxConnectionDuration(int maxConnectionDuration) {
-		this.maxConnectionDuration = maxConnectionDuration;
-	}
-
-	/**
-	 * @return the permittedCarrier
-	 */
-	public String[] getPermittedCarrier() {
-		return permittedCarrier;
-	}
-
-	/**
-	 * @param permittedCarrier the permittedCarrier to set
-	 */
-	public void setPermittedCarrier(String[] permittedCarrier) {
-		this.permittedCarrier = permittedCarrier;
-	}
-
-	/**
-	 * @return the prohibitedCarrier
-	 */
-	public String[] getProhibitedCarrier() {
-		return prohibitedCarrier;
-	}
-
-	/**
-	 * @param prohibitedCarrier the prohibitedCarrier to set
-	 */
-	public void setProhibitedCarrier(String[] prohibitedCarrier) {
-		this.prohibitedCarrier = prohibitedCarrier;
-	}
-
-	/**
-	 * @return the preferredCabin
-	 */
-	public String getPreferredCabin() {
-		return preferredCabin;
-	}
-
-	/**
-	 * @param preferredCabin the preferredCabin to set
-	 */
-	public void setPreferredCabin(String preferredCabin) {
-		this.preferredCabin = preferredCabin;
 	}
 
 }

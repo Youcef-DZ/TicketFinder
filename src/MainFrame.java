@@ -14,7 +14,7 @@ public class MainFrame extends JFrame {
 	JPanel searchPnl = new SearchPanel();
 	add(searchPnl);
 	
-	setPreferredSize(new Dimension(800,600));
+	setPreferredSize(new Dimension(800,600));// changed it to preferredSize, Thanks!
 
 		setTitle("Ticket Finder");
 		pack();

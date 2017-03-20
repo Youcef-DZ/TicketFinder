@@ -15,11 +15,6 @@ import java.util.Properties;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JCheckBox;
-import javax.swing.JFrame;
-
-import java.awt.event.ActionListener;
-import java.text.SimpleDateFormat;
-import java.awt.event.ActionEvent;
 
 public class SearchPanel extends JPanel {
 
@@ -27,27 +22,21 @@ public class SearchPanel extends JPanel {
 
 	private JTextField fromTextField;
 	private JTextField toTextField;
-	JDatePickerImpl departureDatePicker;
-	JDatePickerImpl returnDatePicker;
-	final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
 	/**
 	 * Create the panel.
 	 */
 	public SearchPanel() {
 		
-		UtilDateModel departureDateModel = new UtilDateModel();
-		UtilDateModel arrivalDateModel = new UtilDateModel();
+		UtilDateModel model = new UtilDateModel();
 		
 		Properties p = new Properties();
 		p.put("text.today", "Today");
 		p.put("text.month", "Month");
 		p.put("text.year", "Year");
-		JDatePanelImpl dpd = new JDatePanelImpl(departureDateModel, p);
-		JDatePanelImpl dpa = new JDatePanelImpl(arrivalDateModel, p);
-		
-		departureDatePicker = new JDatePickerImpl(dpd, new DateLabelFormatter());
-		returnDatePicker = new JDatePickerImpl(dpa, new DateLabelFormatter());
+		JDatePanelImpl datePanel = new JDatePanelImpl(model, p);
+		JDatePickerImpl departureDatePicker = new JDatePickerImpl(datePanel, new DateLabelFormatter());
+		JDatePickerImpl arrivalDatePicker = new JDatePickerImpl(datePanel, new DateLabelFormatter());
 		
 		List<String> airportsList = new ArrayList<String>();
 		airportsList.add("JFK");
@@ -64,6 +53,8 @@ public class SearchPanel extends JPanel {
 		JLabel lblArrival = new JLabel("Arrival: ");
 		lblArrival.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		
+
+		
 		JLabel lblFrom = new JLabel("From:");
 		lblFrom.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		
@@ -79,21 +70,10 @@ public class SearchPanel extends JPanel {
 		toTextField.setColumns(10);
 		
 		JButton btnSearch = new JButton("	Search	");
-		btnSearch.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				Search s = new Search();
-				s.setDeparture(fromTextField.getText());
-				s.setDestination(toTextField.getText());
-				s.setDepartureDate(getDepartureDate());
-				JFrame resultFrame = new SearchResults(s);
-				resultFrame.setVisible(true);
-			}
-		});
 		btnSearch.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		
 		JCheckBox chckbxNonstopOnly = new JCheckBox("Non-stop only");
 		chckbxNonstopOnly.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
@@ -115,10 +95,11 @@ public class SearchPanel extends JPanel {
 								.addComponent(lblTo)
 								.addComponent(lblArrival)))
 						.addComponent(chckbxNonstopOnly))
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addComponent(btnSearch)
-						.addComponent(toTextField, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(returnDatePicker))
+						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
+							.addComponent(arrivalDatePicker, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+							.addComponent(toTextField)))
 					.addGap(28))
 		);
 		groupLayout.setVerticalGroup(
@@ -132,9 +113,8 @@ public class SearchPanel extends JPanel {
 						.addComponent(departureDatePicker, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addGroup(groupLayout.createSequentialGroup()
 							.addGap(3)
-							.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-								.addComponent(lblArrival)
-								.addComponent(returnDatePicker, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))))
+							.addComponent(lblArrival))
+						.addComponent(arrivalDatePicker, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addGap(3)
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addComponent(lblFrom)
@@ -151,24 +131,6 @@ public class SearchPanel extends JPanel {
 		setLayout(groupLayout);
 
 	}
-	
-	public String getDepartureDate(){
-		return sdf.format(departureDatePicker.getModel().getValue());
-	}
-	
-	public String getReturnDate(){
-		return sdf.format(returnDatePicker.getModel().getValue());
-	}
-	
-	public String getDepartureAirport(){
-		return fromTextField.getText();
-	}
-	
-	public String getArrivalAirport(){
-		return toTextField.getText();
-	}
-	
-	
 }
 
 
