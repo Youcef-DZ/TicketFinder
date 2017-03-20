@@ -13,24 +13,25 @@ import com.google.api.services.qpxExpress.model.TripOption;
  * @author Youcef Laidi
  *
  */
-public class SearchResults {
-	public static void main(String args[]) {
+public class SearchResults extends JFrame{
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
-		JFrame frame = new JFrame("Search Results");
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	public SearchResults(Search s) {
+
+		super("Search Results");
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		ResultsTable newContentPane = new ResultsTable();
 		newContentPane.setOpaque(true);
-		frame.setContentPane(newContentPane);
+		setContentPane(newContentPane);
 
-		frame.setPreferredSize(new Dimension(800, 400));
-		frame.pack();
-		frame.setVisible(true);
-
-		Search s = new Search();
-		s.setDeparture("PHL");
-		s.setDestination("LAX");
-		s.setDepartureDate("2017-04-20");
+		setPreferredSize(new Dimension(800, 400));
+		pack();
+		setVisible(true);
 
 		List<TripOption> tripResults = s.getResults();
 
