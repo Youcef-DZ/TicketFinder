@@ -1,4 +1,3 @@
-
 import java.awt.Dimension;
 
 import javax.swing.JFrame;
@@ -14,7 +13,7 @@ public class MainFrame extends JFrame {
 	JPanel searchPnl = new SearchPanel();
 	add(searchPnl);
 	
-	setPreferredSize(new Dimension(800,600));
+	setPreferredSize(new Dimension(950, 650));
 
 		setTitle("Ticket Finder");
 		pack();

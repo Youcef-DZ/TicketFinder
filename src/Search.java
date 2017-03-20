@@ -50,7 +50,14 @@ public class Search {
 	private Future<List<TripOption>> future;
 
 	public Search() {
+		// TO-DO set default values
+		// default date can be set to today's date
+	}
 
+	/**
+	 * 
+	 */
+	public void startSearch() {
 		ExecutorService executor = Executors.newSingleThreadExecutor();
 		Callable<List<TripOption>> callable;
 		

@@ -15,8 +15,6 @@ import java.util.Properties;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JCheckBox;
-import javax.swing.JFrame;
-
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
 import java.awt.event.ActionEvent;
@@ -30,6 +28,7 @@ public class SearchPanel extends JPanel {
 	JDatePickerImpl departureDatePicker;
 	JDatePickerImpl returnDatePicker;
 	final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+	Search s = new Search();
 
 	/**
 	 * Create the panel.
@@ -78,14 +77,16 @@ public class SearchPanel extends JPanel {
 		toTextField.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		toTextField.setColumns(10);
 		
+		JPanel resultFrame = new SearchResults();
+		
 		JButton btnSearch = new JButton("	Search	");
 		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				Search s = new Search();
 				s.setDeparture(fromTextField.getText());
 				s.setDestination(toTextField.getText());
 				s.setDepartureDate(getDepartureDate());
-				JFrame resultFrame = new SearchResults(s);
+				s.startSearch();
+				((SearchResults) resultFrame).getResults(s);
 				resultFrame.setVisible(true);
 			}
 		});
@@ -94,32 +95,36 @@ public class SearchPanel extends JPanel {
 		JCheckBox chckbxNonstopOnly = new JCheckBox("Non-stop only");
 		chckbxNonstopOnly.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		
+		
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
 					.addGap(30)
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addComponent(resultFrame, GroupLayout.PREFERRED_SIZE, 850, GroupLayout.PREFERRED_SIZE)
 						.addGroup(groupLayout.createSequentialGroup()
-							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
-								.addGroup(groupLayout.createSequentialGroup()
-									.addComponent(lblDeparture)
-									.addGap(30)
-									.addComponent(departureDatePicker, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-								.addGroup(groupLayout.createSequentialGroup()
-									.addComponent(lblFrom)
-									.addGap(81)
-									.addComponent(fromTextField)))
-							.addGap(35)
 							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-								.addComponent(lblTo)
-								.addComponent(lblArrival)))
-						.addComponent(chckbxNonstopOnly))
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
-						.addComponent(btnSearch)
-						.addComponent(toTextField, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(returnDatePicker))
-					.addGap(28))
+								.addGroup(groupLayout.createSequentialGroup()
+									.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
+										.addGroup(groupLayout.createSequentialGroup()
+											.addComponent(lblDeparture)
+											.addGap(30)
+											.addComponent(departureDatePicker, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+										.addGroup(groupLayout.createSequentialGroup()
+											.addComponent(lblFrom)
+											.addGap(81)
+											.addComponent(fromTextField)))
+									.addGap(35)
+									.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+										.addComponent(lblTo)
+										.addComponent(lblArrival)))
+								.addComponent(chckbxNonstopOnly))
+							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
+								.addComponent(btnSearch)
+								.addComponent(toTextField, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(returnDatePicker, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))))
+					.addContainerGap(54, Short.MAX_VALUE))
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
@@ -146,7 +151,9 @@ public class SearchPanel extends JPanel {
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addComponent(btnSearch)
 						.addComponent(chckbxNonstopOnly))
-					.addGap(17))
+					.addGap(39)
+					.addComponent(resultFrame, GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE)
+					.addGap(35))
 		);
 		setLayout(groupLayout);
 
@@ -167,5 +174,4 @@ public class SearchPanel extends JPanel {
 	public String getArrivalAirport(){
 		return toTextField.getText();
 	}
-	
 }
