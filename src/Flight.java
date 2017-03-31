@@ -6,7 +6,7 @@
 public class Flight {
 	private int flightNumber;
 	private String price;
-	private String airLine;
+	private String airLineCode;
 	private String origin;
 	private String destination;
 	private String originTerminal;
@@ -38,7 +38,7 @@ public class Flight {
 		
 		this.flightNumber = flightNumber;
 		this.price = price;
-		this.airLine = airLine;
+		this.airLineCode = airLine;
 		this.origin = origin;
 		this.destination = destination;
 		this.originTerminal = originTerminal;
@@ -68,7 +68,7 @@ public class Flight {
 	 * @return the price
 	 */
 	public String getPrice() {
-		return price;
+		return "$"+ price.substring(3);
 	}
 
 	/**
@@ -79,17 +79,52 @@ public class Flight {
 	}
 
 	/**
-	 * @return the airLine
+	 * @return the airLineCode
 	 */
 	public String getAirLine() {
-		return airLine;
+		return airLineCode;
 	}
 
 	/**
-	 * @param airLine the airLine to set
+	 * @param airLine the airLineCode to set
 	 */
 	public void setAirLine(String airLine) {
-		this.airLine = airLine;
+		this.airLineCode = airLine;
+	}
+	
+	/**
+	 * @return the airLine
+	 */
+	public String getAirLineName() {
+		if( airLineCode.equals("B6")){
+			return "Jet Blue";
+		}
+		if( airLineCode.equals("VX")){
+			return "Virgin America";
+		}
+		if( airLineCode.equals("AS")){
+			return "Alaska Airlines";
+		}
+		if( airLineCode.equals("UA")){
+			return "United Airlies";
+		}
+		if( airLineCode.equals("SY")){
+			return "Sun Country Airlines";
+		}
+		if( airLineCode.equals("AC")){
+			return "Air Canada";
+		}
+		if( airLineCode.equals("NK")){
+			return "Spirit Airlines";
+		}
+		if( airLineCode.equals("F9")){
+			return "Frontier Airlines";
+		}
+		if( airLineCode.equals("WS")){
+			return "WestJet";
+		}
+		
+		return airLineCode;
 	}
 
 	/**
