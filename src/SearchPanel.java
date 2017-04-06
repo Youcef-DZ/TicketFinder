@@ -1,43 +1,55 @@
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-
-import org.jdatepicker.impl.JDatePanelImpl;
-import org.jdatepicker.impl.JDatePickerImpl;
-import org.jdatepicker.impl.UtilDateModel;
-
-import javax.swing.JLabel;
-import javax.swing.JButton;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Properties;
-
-import javax.swing.BorderFactory;
-import javax.swing.ButtonGroup;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.JCheckBox;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
-import java.awt.event.ActionEvent;
-import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.JRadioButton;
-import javax.swing.JComboBox;
-import java.awt.Color;
+import java.awt.Component;
 
+import javax.swing.JPanel;
+import javax.swing.JButton;
+import javax.swing.Box;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+import javax.swing.UIManager;
+import javax.swing.border.Border;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.TitledBorder;
+
+import java.util.Calendar;
+import java.util.List;
+
+import com.toedter.calendar.JDateChooser;
+
+/**
+ * @author Youcef Laidi
+ *
+ */
 public class SearchPanel extends JPanel {
 
+	/**
+	 * 
+	 */
 	private static final long serialVersionUID = 1L;
-	private final Integer[] numbers = new Integer[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
-	private final String[] maxStops = new String[] { "", "1", "2", "3", "4", "5" };
-	private final String[] cabins = new String[] { "", "COACH", "PREMIUM_COACH", "BUSINESS", "FIRST" };
-	private final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-
-	private final JButton btnSearch = new JButton("	Search	");
 	private final JLabel lblDeparture = new JLabel("Depart: ");
 	private final JLabel lblFrom = new JLabel("From:");
 	private final JLabel lblReturn = new JLabel("Return: ");
 	private final JLabel lblTo = new JLabel("To:");
+	private JTextField fromTextField;
+	private JTextField toTextField;
+	private JDateChooser departureDatePicker;
+	private JDateChooser returnDatePicker;
+
+	private final Integer[] numbers = new Integer[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+	private final String[] maxStops = new String[] { "", "1", "2", "3", "4", "5" };
+	private final String[] cabins = new String[] { "", "COACH", "PREMIUM_COACH", "BUSINESS", "FIRST" };
+
 	private final JLabel lblAdult = new JLabel("Adults:");
 	private final JLabel lblChild = new JLabel("Child:");
 	private final JLabel lblInfantInSeat = new JLabel("Infant In Seat:");
@@ -46,16 +58,10 @@ public class SearchPanel extends JPanel {
 	private final JLabel lblMaxStops = new JLabel("Max Stops:");
 	private final JLabel lblSenior = new JLabel("Senior:");
 	private final JLabel lblInfantInLap = new JLabel("Infant In Lap:");
+	
+	ConnectDatabase cb = new ConnectDatabase();
 
-	private JTextField fromTextField;
-	private JTextField toTextField;
 	private JTextField maxPriceTextField;
-
-	private JDatePickerImpl departureDatePicker;
-	private JDatePickerImpl returnDatePicker;
-
-	private JRadioButton rdbtnOneway = new JRadioButton("One Way");
-	private JRadioButton rdbtnRoundtrip = new JRadioButton("Rount Trip");
 	private JCheckBox chckbxNonstopOnly = new JCheckBox("Non-stop only");
 
 	private final JComboBox<?> adultNcomboBox = new JComboBox<Object>(numbers);
@@ -65,35 +71,46 @@ public class SearchPanel extends JPanel {
 	private final JComboBox<?> infantInLapCB = new JComboBox<Object>(numbers);
 	private final JComboBox<?> maxStopsComboBox = new JComboBox<Object>(maxStops);
 	private final JComboBox<?> preferredCabinCB = new JComboBox<Object>(cabins);
+	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+	private final JButton btnSearch = new JButton("\tSearch\t");
 
 	/**
 	 * Create the panel.
 	 */
 	public SearchPanel() {
-		Date date = new Date();
-		UtilDateModel departureDateModel = new UtilDateModel(date);
-		UtilDateModel arrivalDateModel = new UtilDateModel();
+		JPanel content = new JPanel();
+		content.setLayout(new GridLayout(2, 1));
 
-		Properties p = new Properties();
-		p.put("text.today", "Today");
-		p.put("text.month", "Month");
-		p.put("text.year", "Year");
-		JDatePanelImpl dpd = new JDatePanelImpl(departureDateModel, p);
-		JDatePanelImpl dpa = new JDatePanelImpl(arrivalDateModel, p);
+		JPanel topPanel = createTopPanel();
+		content.add(topPanel);
 
-		List<String> airportsList = new ArrayList<String>();
-		airportsList.add("New York");
-		airportsList.add("Boston");
-		airportsList.add("Los Angeles");
-		airportsList.add("Chicago");
+		JPanel optionalPanel = createOptionalPanel();
+		content.add(optionalPanel);
 
-		airportsList.add("JFK");
-		airportsList.add("BOS");
-		airportsList.add("LAX");
-		airportsList.add("LGA");
-		airportsList.add("PHL");
+		GridBagConstraints gbc_searchPanel = new GridBagConstraints();
+		gbc_searchPanel.insets = new Insets(0, 0, 5, 0);
+		gbc_searchPanel.gridx = 0;
+		gbc_searchPanel.gridy = 1;
 
-		AutoComboBox airportsCB = new AutoComboBox(airportsList);
+		add(content, gbc_searchPanel);
+	}
+
+	/**
+	 * @return optionalPanel
+	 */
+	private JPanel createOptionalPanel() {
+		JPanel optionalPanel = new JPanel();
+		setBorder(optionalPanel, "Optional");
+
+		maxPriceTextField = new JTextField();
+		maxPriceTextField.setColumns(10);
+
+		chckbxNonstopOnly.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				maxStopsComboBox.setEnabled(chckbxNonstopOnly.isSelected() ? false : true);
+			}
+		});
 
 		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -133,194 +150,232 @@ public class SearchPanel extends JPanel {
 			}
 		});
 
-		ButtonGroup grp = new ButtonGroup();
-		grp.add(rdbtnOneway);
-		grp.add(rdbtnRoundtrip);
+		GridBagLayout gbl_optionalPanel = new GridBagLayout();
+		gbl_optionalPanel.columnWidths = new int[] { 103, 36, 49, 116, 133, 35, 90, 66, 0 };
+		optionalPanel.setLayout(gbl_optionalPanel);
 
-		departureDatePicker = new JDatePickerImpl(dpd, new DateLabelFormatter());
-		returnDatePicker = new JDatePickerImpl(dpa, new DateLabelFormatter());
-
-		departureDatePicker.getJFormattedTextField().setBackground(Color.WHITE);
-		returnDatePicker.getJFormattedTextField().setBackground(Color.WHITE);
-
-		fromTextField = new AutoTextField(airportsList, airportsCB);
-		fromTextField.setColumns(10);
-
-		toTextField = new AutoTextField(airportsList, airportsCB);
-		toTextField.setColumns(10);
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.anchor = GridBagConstraints.WEST;
+		gbc.insets = new Insets(0, 0, 5, 5);
+		gbc.gridx = 0;
+		gbc.gridy = 1;
+		optionalPanel.add(lblAdult, gbc);
 
 		adultNcomboBox.removeItemAt(0); // an adult has to be present
-		maxPriceTextField = new JTextField();
-		maxPriceTextField.setColumns(10);
 
-		JPanel panel = new JPanel();
-		panel.setBorder(BorderFactory.createTitledBorder("	Search	"));
+		gbc = new GridBagConstraints();
+		gbc.anchor = GridBagConstraints.NORTHWEST;
+		gbc.insets = new Insets(0, 0, 5, 5);
+		gbc.gridx = 2;
+		gbc.gridy = 1;
+		optionalPanel.add(adultNcomboBox, gbc);
 
-		JPanel optionalPanel = new JPanel();
-		optionalPanel.setBorder(BorderFactory.createTitledBorder("	Optional	"));
+		gbc = new GridBagConstraints();
+		gbc.anchor = GridBagConstraints.WEST;
+		gbc.insets = new Insets(0, 0, 5, 5);
+		gbc.gridx = 4;
+		gbc.gridy = 1;
+		optionalPanel.add(lblMaxPrice, gbc);
 
-		rdbtnOneway.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				returnDatePicker.setVisible(rdbtnOneway.isSelected() ? false : true);
-				lblReturn.setVisible(rdbtnOneway.isSelected() ? false : true);
-			}
-		});
+		gbc = new GridBagConstraints();
+		gbc.anchor = GridBagConstraints.NORTH;
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.insets = new Insets(0, 0, 5, 5);
+		gbc.gridx = 6;
+		gbc.gridy = 1;
+		optionalPanel.add(maxPriceTextField, gbc);
 
-		rdbtnRoundtrip.setSelected(true); // round trip is default
-		rdbtnRoundtrip.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				returnDatePicker.setVisible(true);
-				lblReturn.setVisible(true);
-			}
-		});
+		gbc = new GridBagConstraints();
+		gbc.anchor = GridBagConstraints.WEST;
+		gbc.insets = new Insets(0, 0, 5, 5);
+		gbc.gridx = 0;
+		gbc.gridy = 2;
+		optionalPanel.add(lblSenior, gbc);
 
-		chckbxNonstopOnly.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				maxStopsComboBox.setEnabled(chckbxNonstopOnly.isSelected() ? false : true);
-			}
-		});
+		gbc = new GridBagConstraints();
+		gbc.anchor = GridBagConstraints.NORTHWEST;
+		gbc.insets = new Insets(0, 0, 5, 5);
+		gbc.gridx = 2;
+		gbc.gridy = 2;
+		optionalPanel.add(seniorNcomboBox, gbc);
 
-		GroupLayout groupLayout = new GroupLayout(this);
-		groupLayout.setHorizontalGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-				.addGroup(groupLayout.createSequentialGroup()
-						.addGroup(
-								groupLayout.createParallelGroup(Alignment.LEADING)
-										.addGroup(groupLayout.createSequentialGroup().addGap(83)
-												.addComponent(rdbtnOneway).addGap(35).addComponent(rdbtnRoundtrip))
-										.addGroup(groupLayout.createSequentialGroup().addContainerGap()
-												.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING, false)
-														.addComponent(panel, Alignment.LEADING, 0, 0, Short.MAX_VALUE)
-														.addComponent(btnSearch, GroupLayout.PREFERRED_SIZE, 122,
-																GroupLayout.PREFERRED_SIZE)
-														.addComponent(optionalPanel, Alignment.LEADING,
-																GroupLayout.PREFERRED_SIZE, 832,
-																GroupLayout.PREFERRED_SIZE))))
-						.addContainerGap(38, Short.MAX_VALUE)));
-		groupLayout.setVerticalGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup().addContainerGap()
-						.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE).addComponent(rdbtnOneway)
-								.addComponent(rdbtnRoundtrip))
-						.addGap(18).addComponent(panel, GroupLayout.PREFERRED_SIZE, 142, GroupLayout.PREFERRED_SIZE)
-						.addPreferredGap(ComponentPlacement.UNRELATED)
-						.addComponent(optionalPanel, GroupLayout.PREFERRED_SIZE, 331, GroupLayout.PREFERRED_SIZE)
-						.addGap(18).addComponent(btnSearch, GroupLayout.PREFERRED_SIZE, 56, GroupLayout.PREFERRED_SIZE)
-						.addContainerGap()));
+		gbc = new GridBagConstraints();
+		gbc.anchor = GridBagConstraints.WEST;
+		gbc.insets = new Insets(0, 0, 5, 5);
+		gbc.gridx = 4;
+		gbc.gridy = 2;
+		optionalPanel.add(lblPreferedCabin, gbc);
 
-		GroupLayout gl_panel = new GroupLayout(panel);
-		gl_panel.setHorizontalGroup(gl_panel.createParallelGroup(Alignment.LEADING).addGroup(gl_panel
-				.createSequentialGroup().addGap(37)
-				.addGroup(gl_panel.createParallelGroup(Alignment.LEADING).addComponent(lblFrom)
-						.addComponent(lblDeparture))
-				.addGap(18)
-				.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
-						.addComponent(departureDatePicker, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(fromTextField, GroupLayout.PREFERRED_SIZE, 202, GroupLayout.PREFERRED_SIZE))
-				.addGap(53)
-				.addGroup(gl_panel.createParallelGroup(Alignment.LEADING).addComponent(lblTo).addComponent(lblReturn))
-				.addPreferredGap(ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
-				.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
-						.addComponent(toTextField, GroupLayout.PREFERRED_SIZE, 221, GroupLayout.PREFERRED_SIZE)
-						.addComponent(returnDatePicker, GroupLayout.PREFERRED_SIZE, 218, GroupLayout.PREFERRED_SIZE))
-				.addGap(27)));
-		gl_panel.setVerticalGroup(gl_panel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_panel.createSequentialGroup().addContainerGap()
-						.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE).addComponent(lblFrom)
-								.addComponent(fromTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblTo).addComponent(toTextField, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addGap(18)
-						.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING).addComponent(lblReturn)
-								.addComponent(departureDatePicker, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblDeparture).addComponent(returnDatePicker, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addContainerGap(24, Short.MAX_VALUE)));
-		panel.setLayout(gl_panel);
+		gbc = new GridBagConstraints();
+		gbc.anchor = GridBagConstraints.NORTH;
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.insets = new Insets(0, 0, 5, 5);
+		gbc.gridwidth = 2;
+		gbc.gridx = 6;
+		gbc.gridy = 2;
+		optionalPanel.add(preferredCabinCB, gbc);
 
-		GroupLayout gl_optionalPanel = new GroupLayout(optionalPanel);
-		gl_optionalPanel.setHorizontalGroup(gl_optionalPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_optionalPanel.createSequentialGroup().addGap(35)
-						.addGroup(gl_optionalPanel.createParallelGroup(Alignment.LEADING).addComponent(lblAdult)
-								.addComponent(lblChild).addComponent(lblSenior).addComponent(lblInfantInSeat)
-								.addComponent(lblInfantInLap))
-						.addGap(36)
-						.addGroup(gl_optionalPanel.createParallelGroup(Alignment.LEADING).addGroup(gl_optionalPanel
-								.createSequentialGroup()
-								.addGroup(gl_optionalPanel.createParallelGroup(Alignment.LEADING)
-										.addComponent(seniorNcomboBox, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(childNcomboBox, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(adultNcomboBox, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-								.addGap(116)
-								.addGroup(gl_optionalPanel.createParallelGroup(Alignment.LEADING)
-										.addComponent(lblMaxPrice).addComponent(lblPreferedCabin)
-										.addComponent(chckbxNonstopOnly))
-								.addGap(35)
-								.addGroup(gl_optionalPanel.createParallelGroup(Alignment.LEADING)
-										.addComponent(maxPriceTextField, GroupLayout.PREFERRED_SIZE, 90,
-												GroupLayout.PREFERRED_SIZE)
-										.addGroup(gl_optionalPanel.createParallelGroup(Alignment.LEADING, false)
-												.addGroup(gl_optionalPanel
-														.createSequentialGroup().addComponent(lblMaxStops)
-														.addPreferredGap(ComponentPlacement.RELATED,
-																GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-														.addComponent(maxStopsComboBox, GroupLayout.PREFERRED_SIZE, 56,
-																GroupLayout.PREFERRED_SIZE))
-												.addComponent(preferredCabinCB, GroupLayout.PREFERRED_SIZE, 212,
-														GroupLayout.PREFERRED_SIZE))))
-								.addComponent(infantInSeatCB, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(infantInLapCB, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE))
-						.addContainerGap(101, Short.MAX_VALUE)));
-		gl_optionalPanel.setVerticalGroup(gl_optionalPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_optionalPanel.createSequentialGroup().addContainerGap()
-						.addGroup(gl_optionalPanel.createParallelGroup(Alignment.BASELINE).addComponent(lblAdult)
-								.addComponent(adultNcomboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblMaxPrice).addComponent(maxPriceTextField, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addPreferredGap(ComponentPlacement.UNRELATED)
-						.addGroup(gl_optionalPanel.createParallelGroup(Alignment.BASELINE)
-								.addComponent(lblPreferedCabin)
-								.addComponent(preferredCabinCB, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblSenior).addComponent(seniorNcomboBox, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addPreferredGap(ComponentPlacement.UNRELATED)
-						.addGroup(gl_optionalPanel.createParallelGroup(Alignment.TRAILING)
-								.addGroup(gl_optionalPanel.createParallelGroup(Alignment.BASELINE)
-										.addComponent(childNcomboBox, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(lblChild))
-								.addGroup(gl_optionalPanel.createParallelGroup(Alignment.BASELINE)
-										.addComponent(chckbxNonstopOnly).addComponent(lblMaxStops).addComponent(
-												maxStopsComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-												GroupLayout.PREFERRED_SIZE)))
-						.addPreferredGap(ComponentPlacement.UNRELATED)
-						.addGroup(gl_optionalPanel.createParallelGroup(Alignment.LEADING).addComponent(lblInfantInSeat)
-								.addComponent(infantInSeatCB, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE))
-						.addPreferredGap(ComponentPlacement.UNRELATED)
-						.addGroup(gl_optionalPanel.createParallelGroup(Alignment.LEADING).addComponent(lblInfantInLap)
-								.addComponent(infantInLapCB, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-										GroupLayout.PREFERRED_SIZE))
-						.addGap(90)));
-		optionalPanel.setLayout(gl_optionalPanel);
-		setLayout(groupLayout);
+		gbc = new GridBagConstraints();
+		gbc.anchor = GridBagConstraints.WEST;
+		gbc.insets = new Insets(0, 0, 5, 5);
+		gbc.gridx = 0;
+		gbc.gridy = 3;
+		optionalPanel.add(lblChild, gbc);
 
+		gbc = new GridBagConstraints();
+		gbc.anchor = GridBagConstraints.SOUTHWEST;
+		gbc.insets = new Insets(0, 0, 5, 5);
+		gbc.gridx = 2;
+		gbc.gridy = 3;
+		optionalPanel.add(childNcomboBox, gbc);
+
+		gbc = new GridBagConstraints();
+		gbc.anchor = GridBagConstraints.NORTHWEST;
+		gbc.insets = new Insets(0, 0, 5, 5);
+		gbc.gridx = 4;
+		gbc.gridy = 3;
+		optionalPanel.add(chckbxNonstopOnly, gbc);
+
+		gbc = new GridBagConstraints();
+		gbc.anchor = GridBagConstraints.WEST;
+		gbc.insets = new Insets(0, 0, 5, 5);
+		gbc.gridx = 6;
+		gbc.gridy = 3;
+		optionalPanel.add(lblMaxStops, gbc);
+
+		gbc = new GridBagConstraints();
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.insets = new Insets(0, 0, 5, 5);
+		gbc.gridx = 7;
+		gbc.gridy = 3;
+		optionalPanel.add(maxStopsComboBox, gbc);
+
+		gbc = new GridBagConstraints();
+		gbc.anchor = GridBagConstraints.NORTHWEST;
+		gbc.insets = new Insets(0, 0, 5, 5);
+		gbc.gridx = 0;
+		gbc.gridy = 4;
+		optionalPanel.add(lblInfantInSeat, gbc);
+
+		gbc = new GridBagConstraints();
+		gbc.anchor = GridBagConstraints.NORTHWEST;
+		gbc.insets = new Insets(0, 0, 5, 5);
+		gbc.gridx = 2;
+		gbc.gridy = 4;
+		optionalPanel.add(infantInSeatCB, gbc);
+
+		gbc = new GridBagConstraints();
+		gbc.gridwidth = 2;
+		gbc.fill = GridBagConstraints.BOTH;
+		gbc.gridheight = 2;
+		gbc.insets = new Insets(0, 0, 0, 5);
+		gbc.gridx = 6;
+		gbc.gridy = 4;
+		optionalPanel.add(btnSearch, gbc);
+
+		gbc = new GridBagConstraints();
+		gbc.anchor = GridBagConstraints.NORTHWEST;
+		gbc.insets = new Insets(0, 0, 0, 5);
+		gbc.gridx = 0;
+		gbc.gridy = 5;
+		optionalPanel.add(lblInfantInLap, gbc);
+
+		gbc = new GridBagConstraints();
+		gbc.anchor = GridBagConstraints.NORTHWEST;
+		gbc.insets = new Insets(0, 0, 0, 5);
+		gbc.gridx = 2;
+		gbc.gridy = 5;
+		optionalPanel.add(infantInLapCB, gbc);
+
+		return optionalPanel;
+	}
+
+	/**
+	 * @return JPanel
+	 */
+	private JPanel createTopPanel() {
+		JPanel topPanel = new JPanel();
+		setBorder(topPanel, "Search");
+
+		Calendar cal = Calendar.getInstance(); // today
+		departureDatePicker = new JDateChooser();
+		returnDatePicker = new JDateChooser();
+
+		Dimension dd = new Dimension(270, 60);
+		departureDatePicker.setMaximumSize(dd);
+		returnDatePicker.setMaximumSize(dd);
+
+		departureDatePicker.setCalendar(cal);
+
+		List<Object> airportsList = cb.getNames();
+		AutoComboBox airportsCB = new AutoComboBox(airportsList);
+
+		Dimension d = new Dimension(700, 60);
+
+		toTextField = new AutoTextField(airportsList, airportsCB);
+		toTextField.setAlignmentX(Component.RIGHT_ALIGNMENT);
+		toTextField.setMaximumSize(d);
+
+		topPanel.setLayout(new GridLayout(0, 1, 0, 5));
+
+		Box topBox = Box.createVerticalBox();
+		fromTextField = new AutoTextField(airportsList, airportsCB);
+		fromTextField.setAlignmentX(Component.RIGHT_ALIGNMENT);
+		fromTextField.setMaximumSize(d);
+
+		Box fromBox = Box.createHorizontalBox();
+		fromBox.setAlignmentX(Component.LEFT_ALIGNMENT);
+		fromBox.setAlignmentY(Component.CENTER_ALIGNMENT);
+		lblFrom.setAlignmentX(Component.CENTER_ALIGNMENT);
+		fromBox.add(lblFrom);
+		fromBox.add(Box.createHorizontalStrut(57));
+		fromBox.add(fromTextField);
+
+		Box toBox = Box.createHorizontalBox();
+		toBox.setAlignmentX(Component.LEFT_ALIGNMENT);
+		toBox.setAlignmentY(Component.CENTER_ALIGNMENT);
+		toBox.add(lblTo);
+		toBox.add(Box.createHorizontalStrut(90));
+		toBox.add(toTextField);
+
+		topBox.add(fromBox);
+		topBox.add(Box.createVerticalStrut(10));
+		topBox.add(toBox);
+
+		topPanel.add(topBox);
+
+		Box box = Box.createHorizontalBox();
+		box.add(lblDeparture);
+		int strut = 25;
+		box.add(Box.createHorizontalStrut(strut));
+
+		box.add(departureDatePicker);
+		box.add(Box.createHorizontalStrut(strut));
+		box.add(lblReturn);
+		box.add(Box.createHorizontalStrut(strut));
+		box.add(returnDatePicker);
+
+		topPanel.add(box);
+
+		return topPanel;
+	}
+
+	/**
+	 * 
+	 */
+	private void setBorder(JPanel pnl, String title) {
+		Border border = new TitledBorder(UIManager.getBorder("TitledBorder.border"), "\t" + title + "\t",
+				TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0));
+		Border margin = new EmptyBorder(10, 10, 10, 10);
+		pnl.setBorder(new CompoundBorder(border, margin));
 	}
 
 	public String getDepartureDate() {
-		return sdf.format(departureDatePicker.getModel().getValue());
+		return sdf.format(departureDatePicker.getDate());
 	}
 
 	public String getReturnDate() {
-		return sdf.format(returnDatePicker.getModel().getValue());
+		return sdf.format(returnDatePicker.getDate());
 	}
 
 	public String getPreferredCabin() {
@@ -356,34 +411,11 @@ public class SearchPanel extends JPanel {
 	}
 
 	public String getDepartureAirport() {
-		if (fromTextField.getText().equals("New York")) {
-			return "JFK";
-		}
-		if (fromTextField.getText().equals("Boston")) {
-			return "BOS";
-		}
-		if (fromTextField.getText().equals("Los Angeles")) {
-			return "LAX";
-		}
-		if (fromTextField.getText().equals("Chicago")) {
-			return "ORD";
-		}
-		return fromTextField.getText();
+		return cb.getIATAKey(fromTextField.getText());
 	}
 
 	public String getDestinationAirport() {
-		if (toTextField.getText().equals("New York")) {
-			return "JFK";
-		}
-		if (toTextField.getText().equals("Boston")) {
-			return "BOS";
-		}
-		if (toTextField.getText().equals("Los Angeles")) {
-			return "LAX";
-		}
-		if (toTextField.getText().equals("Chicago")) {
-			return "ORD";
-		}
-		return toTextField.getText();
+		return cb.getIATAKey(toTextField.getText());
 	}
+
 }
