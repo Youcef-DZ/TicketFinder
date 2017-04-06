@@ -65,57 +65,66 @@ public class SearchResults extends JFrame {
 
 		dtm.setRowCount(0); // clear table if previous results are there
 		List<TripOption> tripResults = s.getResults();
+		if (tripResults != null) {
+			ConnectDatabase cb = new ConnectDatabase();
+			
+			for (int i = 0; i < tripResults.size(); i++) {
+				Flight tempFlight = new Flight();
 
-		for (int i = 0; i < tripResults.size(); i++) {
-			Flight tempFlight = new Flight();
+				List<SliceInfo> sliceInfo = tripResults.get(i).getSlice();
 
-			List<SliceInfo> sliceInfo = tripResults.get(i).getSlice();
+				for (int j = 0; j < sliceInfo.size(); j++) {
+					int duration = sliceInfo.get(j).getDuration();
+					tempFlight.setDuration(duration);
 
-			for (int j = 0; j < sliceInfo.size(); j++) {
-				int duration = sliceInfo.get(j).getDuration();
-				tempFlight.setDuration(duration);
+					List<SegmentInfo> segInfo = sliceInfo.get(j).getSegment();
 
-				List<SegmentInfo> segInfo = sliceInfo.get(j).getSegment();
+					for (int k = 0; k < segInfo.size(); k++) {
+						// String bookingCode = segInfo.get(k).getBookingCode();
+						FlightInfo flightInfo = segInfo.get(k).getFlight();
+						String flightNum = flightInfo.getNumber();
+						String flightCarrier = flightInfo.getCarrier();
 
-				for (int k = 0; k < segInfo.size(); k++) {
-					// String bookingCode = segInfo.get(k).getBookingCode();
-					FlightInfo flightInfo = segInfo.get(k).getFlight();
-					String flightNum = flightInfo.getNumber();
-					String flightCarrier = flightInfo.getCarrier();
+						tempFlight.setFlightNumber(Integer.parseInt(flightNum));
+						tempFlight.setAirLine(cb.getAirlineName(flightCarrier));
 
-					tempFlight.setFlightNumber(Integer.parseInt(flightNum));
-					tempFlight.setAirLine(flightCarrier);
+						List<LegInfo> leg = segInfo.get(k).getLeg();
 
-					List<LegInfo> leg = segInfo.get(k).getLeg();
+						for (int l = 0; l < leg.size(); l++) {
+							// String aircraft = leg.get(l).getAircraft();
+							String arrivalTime = leg.get(l).getArrivalTime();
+							String departureTime = leg.get(l).getDepartureTime();
+							String dest = leg.get(l).getDestination();
+							// String destTer =
+							// leg.get(l).getDestinationTerminal();
+							String origin = leg.get(l).getOrigin();
+							// String originTer =
+							// leg.get(l).getOriginTerminal();
+							int durationLeg = leg.get(l).getDuration();
+							int mil = leg.get(l).getMileage();
 
-					for (int l = 0; l < leg.size(); l++) {
-						// String aircraft = leg.get(l).getAircraft();
-						String arrivalTime = leg.get(l).getArrivalTime();
-						String departureTime = leg.get(l).getDepartureTime();
-						String dest = leg.get(l).getDestination();
-						// String destTer = leg.get(l).getDestinationTerminal();
-						String origin = leg.get(l).getOrigin();
-						// String originTer = leg.get(l).getOriginTerminal();
-						int durationLeg = leg.get(l).getDuration();
-						int mil = leg.get(l).getMileage();
+							tempFlight.setArrivalTime(arrivalTime);
+							tempFlight.setDepartureTime(departureTime);
+							tempFlight.setDestination(dest);
+							tempFlight.setOrigin(origin);
+							tempFlight.setMileage(mil);
+							tempFlight.setDuration(durationLeg);
 
-						tempFlight.setArrivalTime(arrivalTime);
-						tempFlight.setDepartureTime(departureTime);
-						tempFlight.setDestination(dest);
-						tempFlight.setOrigin(origin);
-						tempFlight.setMileage(mil);
-						tempFlight.setDuration(durationLeg);
-
+						}
 					}
-				}
-				String price = tripResults.get(i).getPricing().get(0).getSaleTotal();
-				tempFlight.setPrice(price);
+					String price = tripResults.get(i).getPricing().get(0).getSaleTotal();
+					tempFlight.setPrice(price);
 
-				// add flight to table
-				dtm.addRow(new Object[] { tempFlight.getAirLineName(), tempFlight.getOrigin(),
-						tempFlight.getDestination(), tempFlight.getDuration(), tempFlight.getPrice() });
+					// add flight to table
+					dtm.addRow(new Object[] { tempFlight.getAirLineName(), tempFlight.getOrigin(),
+							tempFlight.getDestination(), tempFlight.getDuration(), tempFlight.getPrice() });
+
+				}
 
 			}
+		} else {
+			System.out.println("No results found.");
+			System.out.println("from " + s.getDeparture() + " to "+	s.getDestination());
 
 		}
 	}
