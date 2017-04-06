@@ -134,8 +134,12 @@ public class Search {
 
 	List<TripOption> getResults() {
 		try {
-			return future.get(10, TimeUnit.SECONDS);
-		} catch (InterruptedException | ExecutionException | TimeoutException e) {
+			return future.get(20, TimeUnit.SECONDS);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+		} catch (TimeoutException e) {
 			e.printStackTrace();
 		}
 		return null;
@@ -249,6 +253,27 @@ public class Search {
 	 */
 	public void setInfantInSeatCount(int infantInSeatCount) {
 		this.infantInSeatCount = infantInSeatCount;
+	}
+
+	/**
+	 * @return the departure
+	 */
+	public String getDeparture() {
+		return departure;
+	}
+
+	/**
+	 * @return the destination
+	 */
+	public String getDestination() {
+		return destination;
+	}
+
+	/**
+	 * @return the departureDate
+	 */
+	public String getDepartureDate() {
+		return departureDate;
 	}
 
 }
