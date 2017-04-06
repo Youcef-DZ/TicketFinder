@@ -67,7 +67,7 @@ class AutoTextField extends JTextField {
 
 	}
 
-	public AutoTextField(List<String> list) {
+	public AutoTextField(List<Object> list) {
 		isCaseSensitive = false;
 		isStrict = true;
 		autoComboBox = null;
@@ -80,14 +80,14 @@ class AutoTextField extends JTextField {
 		}
 	}
 
-	AutoTextField(List<String> list, AutoComboBox b) {
+	AutoTextField(List<Object> airportsList, AutoComboBox b) {
 		isCaseSensitive = false;
 		isStrict = true;
 		autoComboBox = null;
-		if (list == null) {
+		if (airportsList == null) {
 			throw new IllegalArgumentException("values can not be null");
 		} else {
-			dataList = list;
+			dataList = airportsList;
 			autoComboBox = b;
 			init();
 			return;
@@ -140,11 +140,11 @@ class AutoTextField extends JTextField {
 		isStrict = flag;
 	}
 
-	public List<String> getDataList() {
+	public List<Object> getDataList() {
 		return dataList;
 	}
 
-	public void setDataList(List<String> list) {
+	public void setDataList(List<Object> list) {
 		if (list == null) {
 			throw new IllegalArgumentException("values can not be null");
 		} else {
@@ -153,7 +153,7 @@ class AutoTextField extends JTextField {
 		}
 	}
 
-	private List<String> dataList;
+	private List<Object> dataList;
 
 	private boolean isCaseSensitive;
 
@@ -174,16 +174,16 @@ class AutoComboBox extends JComboBox<Object> {
 			return (AutoTextField) editor;
 		}
 
-		AutoTextFieldEditor(List<String> list) {
-			editor = new AutoTextField(list, AutoComboBox.this);
+		AutoTextFieldEditor(List<Object> airportsList) {
+			editor = new AutoTextField(airportsList, AutoComboBox.this);
 		}
 	}
 
-	public AutoComboBox(List<String> list) {
+	public AutoComboBox(List<Object> airportsList) {
 		isFired = false;
-		autoTextFieldEditor = new AutoTextFieldEditor(list);
+		autoTextFieldEditor = new AutoTextFieldEditor(airportsList);
 		setEditable(true);
-		setModel(new DefaultComboBoxModel<Object>(list.toArray()) {
+		setModel(new DefaultComboBoxModel<Object>(airportsList.toArray()) {
 
 			/**
 			 * 
@@ -219,7 +219,7 @@ class AutoComboBox extends JComboBox<Object> {
 		return autoTextFieldEditor.getAutoTextFieldEditor().getDataList();
 	}
 
-	public void setDataList(List<String> list) {
+	public void setDataList(List<Object> list) {
 		autoTextFieldEditor.getAutoTextFieldEditor().setDataList(list);
 		setModel(new DefaultComboBoxModel<Object>(list.toArray()));
 	}
