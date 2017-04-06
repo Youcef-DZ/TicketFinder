@@ -1,4 +1,4 @@
-iata,type,name,parent_name
+IATA,TYPE,NAME,PARENT_NAME
 0A7,city,Hendersonville,United States
 0A7,airport,Hendersonville Airport,Hendersonville
 AAA,airport,Anaa,Anaa
@@ -2083,8 +2083,6 @@ BUY,city,Bunbury,Australia
 BUY,airport,Bunbury,Bunbury
 BUZ,airport,Bushehr,Bushehr
 BUZ,city,Bushehr,Iran
-BV,country,Bouvet Island,
-BVA,airport,Beauvais-Tille,Paris
 BVB,airport,Boa Vista,Boa Vista
 BVB,city,Boa Vista,Brazil
 BVC,city,Boa Vista,Cape Verde
@@ -12053,7 +12051,6 @@ PHR,city,Pacific Harbor,Fiji
 PHR,airport,Pacific Harbor,Pacific Harbor
 PHS,city,Phitsanulok,Thailand
 PHS,airport,Phitsanulok,Phitsanulok
-PHT,city,Paris,United States
 PHT,airport,Henry County,Paris
 PHU,city,Phu Vinh,Vietnam
 PHU,airport,Phu Vinh,Phu Vinh
@@ -12476,7 +12473,6 @@ PRV,city,Prerov,Czech Republic
 PRV,airport,Prerov,Prerov
 PRW,city,Prentice,United States
 PRW,airport,Prentice,Prentice
-PRX,city,Paris,United States
 PRX,airport,Cox Field,Paris
 PRY,airport,Wonderboom Airport.,Pretoria
 PRY,city,Pretoria,South Africa
@@ -18616,5 +18612,3 @@ ZZU,city,Mzuzu,Malawi
 ZZU,airport,Mzuzu,Mzuzu
 ZZV,city,Zanesville,United States
 ZZV,airport,Zanesville,Zanesville
-БДБ,airport,Bodaybo,Bodaybo
-ТМЗ,airport,Termez,Termez
