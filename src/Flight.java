@@ -95,35 +95,7 @@ public class Flight {
 	/**
 	 * @return the airLine
 	 */
-	public String getAirLineName() {
-		if( airLineCode.equals("B6")){
-			return "Jet Blue";
-		}
-		if( airLineCode.equals("VX")){
-			return "Virgin America";
-		}
-		if( airLineCode.equals("AS")){
-			return "Alaska Airlines";
-		}
-		if( airLineCode.equals("UA")){
-			return "United Airlies";
-		}
-		if( airLineCode.equals("SY")){
-			return "Sun Country Airlines";
-		}
-		if( airLineCode.equals("AC")){
-			return "Air Canada";
-		}
-		if( airLineCode.equals("NK")){
-			return "Spirit Airlines";
-		}
-		if( airLineCode.equals("F9")){
-			return "Frontier Airlines";
-		}
-		if( airLineCode.equals("WS")){
-			return "WestJet";
-		}
-		
+	public String getAirLineName() {		
 		return airLineCode;
 	}
 
