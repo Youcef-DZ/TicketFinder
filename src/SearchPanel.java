@@ -1,20 +1,11 @@
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.text.SimpleDateFormat;
-import java.awt.Component;
+import com.toedter.calendar.JDateChooser;
 
-import javax.swing.JPanel;
-import javax.swing.JButton;
 import javax.swing.Box;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
@@ -22,10 +13,17 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
-
-import com.toedter.calendar.JDateChooser;
 
 /**
  * @author Youcef Laidi
@@ -41,8 +39,14 @@ public class SearchPanel extends JPanel {
 	private final JLabel lblFrom = new JLabel("From:");
 	private final JLabel lblReturn = new JLabel("Return: ");
 	private final JLabel lblTo = new JLabel("To:");
+	
+	private final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+	private final JCheckBox chckbxNonstopOnly = new JCheckBox("Non-stop only");
+	private final JButton btnSearch = new JButton("\tSearch\t");
+
 	private JTextField fromTextField;
 	private JTextField toTextField;
+	private JTextField maxPriceTextField;
 	private JDateChooser departureDatePicker;
 	private JDateChooser returnDatePicker;
 
@@ -58,11 +62,8 @@ public class SearchPanel extends JPanel {
 	private final JLabel lblMaxStops = new JLabel("Max Stops:");
 	private final JLabel lblSenior = new JLabel("Senior:");
 	private final JLabel lblInfantInLap = new JLabel("Infant In Lap:");
-	
-	ConnectDatabase cb = new ConnectDatabase();
 
-	private JTextField maxPriceTextField;
-	private JCheckBox chckbxNonstopOnly = new JCheckBox("Non-stop only");
+	ConnectDatabase cb = new ConnectDatabase();
 
 	private final JComboBox<?> adultNcomboBox = new JComboBox<Object>(numbers);
 	private final JComboBox<?> seniorNcomboBox = new JComboBox<Object>(numbers);
@@ -71,9 +72,6 @@ public class SearchPanel extends JPanel {
 	private final JComboBox<?> infantInLapCB = new JComboBox<Object>(numbers);
 	private final JComboBox<?> maxStopsComboBox = new JComboBox<Object>(maxStops);
 	private final JComboBox<?> preferredCabinCB = new JComboBox<Object>(cabins);
-	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-
-	private final JButton btnSearch = new JButton("\tSearch\t");
 
 	/**
 	 * Create the panel.
@@ -106,48 +104,44 @@ public class SearchPanel extends JPanel {
 		maxPriceTextField = new JTextField();
 		maxPriceTextField.setColumns(10);
 
-		chckbxNonstopOnly.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				maxStopsComboBox.setEnabled(chckbxNonstopOnly.isSelected() ? false : true);
-			}
+		chckbxNonstopOnly.addActionListener((ActionEvent arg0) -> {
+			maxStopsComboBox.setEnabled(!chckbxNonstopOnly.isSelected());
 		});
 
-		btnSearch.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				Search s = new Search();
-				s.setDeparture(getDepartureAirport());
-				s.setDestination(getDestinationAirport());
-				s.setDepartureDate(getDepartureDate());
-				s.setAdultCount(getAdultCount());
+		btnSearch.addActionListener((ActionEvent arg0) -> {
+			Search s = new Search();
+			s.setDeparture(getDepartureAirport());
+			s.setDestination(getDestinationAirport());
+			s.setDepartureDate(getDepartureDate());
+			s.setAdultCount(getAdultCount());
 
-				if (!infantInSeatCB.getSelectedItem().equals(0)) {
-					s.setInfantInSeatCount(getInfantInSeatCount());
-				}
-				if (!infantInLapCB.getSelectedItem().equals(0)) {
-					s.setInfantInLapCount(getInfantInLapCount());
-				}
-				if (!seniorNcomboBox.getSelectedItem().equals(0)) {
-					s.setSeniorCount(getSeniorCount());
-				}
-				if (!childNcomboBox.getSelectedItem().equals(0)) {
-					s.setChildCount(getChildCount());
-				}
-				if (!maxPriceTextField.getText().equals("")) {
-					s.setMaxPrice(getMaxPrice());
-				}
-				if (maxStopsComboBox.isEnabled() && !maxStopsComboBox.getSelectedItem().equals("")) {
-					s.setMaxStops(getMaxStops());
-				}
-				if (!preferredCabinCB.getSelectedItem().equals("")) {
-					s.setPreferredCabin(getPreferredCabin());
-				}
-				if (chckbxNonstopOnly.isSelected()) {
-					s.setMaxStops(0);
-				}
-
-				s.startSearch();
-				new SearchResults(s);
+			if (!infantInSeatCB.getSelectedItem().equals(0)) {
+				s.setInfantInSeatCount(getInfantInSeatCount());
 			}
+			if (!infantInLapCB.getSelectedItem().equals(0)) {
+				s.setInfantInLapCount(getInfantInLapCount());
+			}
+			if (!seniorNcomboBox.getSelectedItem().equals(0)) {
+				s.setSeniorCount(getSeniorCount());
+			}
+			if (!childNcomboBox.getSelectedItem().equals(0)) {
+				s.setChildCount(getChildCount());
+			}
+			if (!maxPriceTextField.getText().equals("")) {
+				s.setMaxPrice(getMaxPrice());
+			}
+			if (maxStopsComboBox.isEnabled() && !maxStopsComboBox.getSelectedItem().equals("")) {
+				s.setMaxStops(getMaxStops());
+			}
+			if (!preferredCabinCB.getSelectedItem().equals("")) {
+				s.setPreferredCabin(getPreferredCabin());
+			}
+			if (chckbxNonstopOnly.isSelected()) {
+				s.setMaxStops(0);
+			}
+
+			s.startSearch();
+			new SearchResults(s);
 		});
 
 		GridBagLayout gbl_optionalPanel = new GridBagLayout();
@@ -307,43 +301,45 @@ public class SearchPanel extends JPanel {
 
 		departureDatePicker.setCalendar(cal);
 
-		List<Object> airportsList = cb.getNames();
-		AutoComboBox airportsCB = new AutoComboBox(airportsList);
+		Timeit.code(() -> {
 
-		Dimension d = new Dimension(700, 60);
+			List<Object> airportsList = cb.getNames();
+			AutoComboBox airportsCB = new AutoComboBox(airportsList);
 
-		toTextField = new AutoTextField(airportsList, airportsCB);
-		toTextField.setAlignmentX(Component.RIGHT_ALIGNMENT);
-		toTextField.setMaximumSize(d);
+			Dimension d = new Dimension(700, 60);
 
-		topPanel.setLayout(new GridLayout(0, 1, 0, 5));
+			toTextField = new AutoTextField(airportsList, airportsCB);
+			toTextField.setAlignmentX(Component.RIGHT_ALIGNMENT);
+			toTextField.setMaximumSize(d);
 
-		Box topBox = Box.createVerticalBox();
-		fromTextField = new AutoTextField(airportsList, airportsCB);
-		fromTextField.setAlignmentX(Component.RIGHT_ALIGNMENT);
-		fromTextField.setMaximumSize(d);
+			topPanel.setLayout(new GridLayout(0, 1, 0, 5));
 
-		Box fromBox = Box.createHorizontalBox();
-		fromBox.setAlignmentX(Component.LEFT_ALIGNMENT);
-		fromBox.setAlignmentY(Component.CENTER_ALIGNMENT);
-		lblFrom.setAlignmentX(Component.CENTER_ALIGNMENT);
-		fromBox.add(lblFrom);
-		fromBox.add(Box.createHorizontalStrut(57));
-		fromBox.add(fromTextField);
+			Box topBox = Box.createVerticalBox();
+			fromTextField = new AutoTextField(airportsList, airportsCB);
+			fromTextField.setAlignmentX(Component.RIGHT_ALIGNMENT);
+			fromTextField.setMaximumSize(d);
 
-		Box toBox = Box.createHorizontalBox();
-		toBox.setAlignmentX(Component.LEFT_ALIGNMENT);
-		toBox.setAlignmentY(Component.CENTER_ALIGNMENT);
-		toBox.add(lblTo);
-		toBox.add(Box.createHorizontalStrut(90));
-		toBox.add(toTextField);
+			Box fromBox = Box.createHorizontalBox();
+			fromBox.setAlignmentX(Component.LEFT_ALIGNMENT);
+			fromBox.setAlignmentY(Component.CENTER_ALIGNMENT);
+			lblFrom.setAlignmentX(Component.CENTER_ALIGNMENT);
+			fromBox.add(lblFrom);
+			fromBox.add(Box.createHorizontalStrut(57));
+			fromBox.add(fromTextField);
 
-		topBox.add(fromBox);
-		topBox.add(Box.createVerticalStrut(10));
-		topBox.add(toBox);
+			Box toBox = Box.createHorizontalBox();
+			toBox.setAlignmentX(Component.LEFT_ALIGNMENT);
+			toBox.setAlignmentY(Component.CENTER_ALIGNMENT);
+			toBox.add(lblTo);
+			toBox.add(Box.createHorizontalStrut(90));
+			toBox.add(toTextField);
 
-		topPanel.add(topBox);
+			topBox.add(fromBox);
+			topBox.add(Box.createVerticalStrut(10));
+			topBox.add(toBox);
 
+			topPanel.add(topBox);
+		});
 		Box box = Box.createHorizontalBox();
 		box.add(lblDeparture);
 		int strut = 25;

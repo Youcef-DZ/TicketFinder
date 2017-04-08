@@ -1,30 +1,21 @@
-import java.io.IOException;
-
-import java.net.MalformedURLException;
-import java.security.GeneralSecurityException;
-import java.util.ArrayList;
-import java.util.List;
-
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
-
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.qpxExpress.QPXExpress;
 import com.google.api.services.qpxExpress.QPXExpressRequestInitializer;
-import com.google.api.services.qpxExpress.model.PassengerCounts;
-import com.google.api.services.qpxExpress.model.SliceInput;
-import com.google.api.services.qpxExpress.model.TripOption;
-import com.google.api.services.qpxExpress.model.TripOptionsRequest;
-import com.google.api.services.qpxExpress.model.TripsSearchRequest;
-import com.google.api.services.qpxExpress.model.TripsSearchResponse;
+import com.google.api.services.qpxExpress.model.*;
+
+import java.security.GeneralSecurityException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 public class Search {
 	private static final String APPLICATION_NAME = "FlightSearch";
@@ -45,7 +36,7 @@ public class Search {
 	private int maxStops;
 	private int maxConnectionDuration; // The longest connection between two
 										// legs, in minutes
-	private int solutions; // he number of solutions to return, maximum 500
+	private final int solutions; // he number of solutions to return, maximum 500
 	private List<String> permittedCarrier; // A list of 2-letter IATA airline
 											// designators.
 	private List<String> prohibitedCarrier; // A list of 2-letter IATA airline
@@ -81,52 +72,49 @@ public class Search {
 		ExecutorService executor = Executors.newSingleThreadExecutor();
 		Callable<List<TripOption>> callable;
 
-		callable = new Callable<List<TripOption>>() {
-			@Override
-			public List<TripOption> call() throws IOException, MalformedURLException {
-				try {
-					httpTransport = GoogleNetHttpTransport.newTrustedTransport();
-				} catch (GeneralSecurityException e) {
-					e.printStackTrace();
-				}
-
-				PassengerCounts passengers = new PassengerCounts();
-				passengers.setAdultCount(adultCount);
-				passengers.setChildCount(childCount);
-				passengers.setInfantInLapCount(infantInLapCount);
-				passengers.setInfantInSeatCount(infantInSeatCount);
-				passengers.setSeniorCount(seniorCount);
-
-				List<SliceInput> slices = new ArrayList<SliceInput>();
-
-				SliceInput slice = new SliceInput();
-				slice.setOrigin(departure);
-				slice.setDestination(destination);
-				slice.setDate(departureDate);
-				slice.setMaxStops(maxStops);
-				slice.setMaxConnectionDuration(maxConnectionDuration);
-				slice.setPreferredCabin(preferredCabin);
-				slice.setPermittedCarrier(permittedCarrier);
-				slice.setProhibitedCarrier(prohibitedCarrier);
-
-				slices.add(slice);
-
-				TripOptionsRequest request = new TripOptionsRequest();
-				request.setSolutions(solutions);
-				request.setPassengers(passengers);
-				request.setMaxPrice(maxPrice);
-				request.setSlice(slices);
-
-				TripsSearchRequest parameters = new TripsSearchRequest();
-				parameters.setRequest(request);
-				QPXExpress qpXExpress = new QPXExpress.Builder(httpTransport, JSON_FACTORY, null)
-						.setApplicationName(APPLICATION_NAME)
-						.setGoogleClientRequestInitializer(new QPXExpressRequestInitializer(API_KEY)).build();
-				TripsSearchResponse list = qpXExpress.trips().search(parameters).execute();
-				tripResults = list.getTrips().getTripOption();
-				return tripResults;
-			}
-		};
+		callable = () -> { // using lambda expression
+                    try {
+                        httpTransport = GoogleNetHttpTransport.newTrustedTransport();
+                    } catch (GeneralSecurityException e) {
+                        e.printStackTrace();
+                    }
+                    
+                    PassengerCounts passengers = new PassengerCounts();
+                    passengers.setAdultCount(adultCount);
+                    passengers.setChildCount(childCount);
+                    passengers.setInfantInLapCount(infantInLapCount);
+                    passengers.setInfantInSeatCount(infantInSeatCount);
+                    passengers.setSeniorCount(seniorCount);
+                    
+                    List<SliceInput> slices = new ArrayList<SliceInput>();
+                    
+                    SliceInput slice = new SliceInput();
+                    slice.setOrigin(departure);
+                    slice.setDestination(destination);
+                    slice.setDate(departureDate);
+                    slice.setMaxStops(maxStops);
+                    slice.setMaxConnectionDuration(maxConnectionDuration);
+                    slice.setPreferredCabin(preferredCabin);
+                    slice.setPermittedCarrier(permittedCarrier);
+                    slice.setProhibitedCarrier(prohibitedCarrier);
+                    
+                    slices.add(slice);
+                    
+                    TripOptionsRequest request = new TripOptionsRequest();
+                    request.setSolutions(solutions);
+                    request.setPassengers(passengers);
+                    request.setMaxPrice(maxPrice);
+                    request.setSlice(slices);
+                    
+                    TripsSearchRequest parameters = new TripsSearchRequest();
+                    parameters.setRequest(request);
+                    QPXExpress qpXExpress = new QPXExpress.Builder(httpTransport, JSON_FACTORY, null)
+                            .setApplicationName(APPLICATION_NAME)
+                            .setGoogleClientRequestInitializer(new QPXExpressRequestInitializer(API_KEY)).build();
+                    TripsSearchResponse list = qpXExpress.trips().search(parameters).execute();
+                    tripResults = list.getTrips().getTripOption();
+                    return tripResults;
+                };
 
 		future = executor.submit(callable);
 		executor.shutdown();
@@ -249,7 +237,7 @@ public class Search {
 	}
 
 	/**
-	 * @param infantInSeatCount2
+	 * @param infantInSeatCount
 	 */
 	public void setInfantInSeatCount(int infantInSeatCount) {
 		this.infantInSeatCount = infantInSeatCount;

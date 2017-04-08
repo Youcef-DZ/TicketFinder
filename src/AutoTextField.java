@@ -1,6 +1,3 @@
-import java.awt.event.ItemEvent;
-import java.util.List;
-
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
@@ -8,6 +5,8 @@ import javax.swing.plaf.basic.BasicComboBoxEditor;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
+import java.awt.event.ItemEvent;
+import java.util.List;
 
 class AutoTextField extends JTextField {
 	/**
@@ -19,11 +18,13 @@ class AutoTextField extends JTextField {
 
 		private static final long serialVersionUID = 1L;
 
+		@Override
 		public void replace(int i, int j, String s, AttributeSet attributeset) throws BadLocationException {
 			super.remove(i, j);
 			insertString(i, s, attributeset);
 		}
 
+		@Override
 		public void insertString(int i, String s, AttributeSet attributeset) throws BadLocationException {
 			if (s == null || "".equals(s))
 				return;
@@ -45,6 +46,7 @@ class AutoTextField extends JTextField {
 			setSelectionEnd(getLength());
 		}
 
+		@Override
 		public void remove(int i, int j) throws BadLocationException {
 			int k = getSelectionStart();
 			if (k > 0)
@@ -76,7 +78,6 @@ class AutoTextField extends JTextField {
 		} else {
 			dataList = list;
 			init();
-			return;
 		}
 	}
 
@@ -90,7 +91,6 @@ class AutoTextField extends JTextField {
 			dataList = airportsList;
 			autoComboBox = b;
 			init();
-			return;
 		}
 	}
 
@@ -113,6 +113,7 @@ class AutoTextField extends JTextField {
 		return null;
 	}
 
+	@Override
 	public void replaceSelection(String s) {
 		AutoDocument _lb = (AutoDocument) getDocument();
 		if (_lb != null)
@@ -120,7 +121,7 @@ class AutoTextField extends JTextField {
 				int i = Math.min(getCaret().getDot(), getCaret().getMark());
 				int j = Math.max(getCaret().getDot(), getCaret().getMark());
 				_lb.replace(i, j - i, s, null);
-			} catch (Exception exception) {
+			} catch (BadLocationException exception) {
 			}
 	}
 
@@ -149,7 +150,6 @@ class AutoTextField extends JTextField {
 			throw new IllegalArgumentException("values can not be null");
 		} else {
 			dataList = list;
-			return;
 		}
 	}
 
@@ -190,6 +190,7 @@ class AutoComboBox extends JComboBox<Object> {
 			 */
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			protected void fireContentsChanged(Object obj, int i, int j) {
 				if (!isFired)
 					super.fireContentsChanged(obj, i, j);
@@ -221,21 +222,19 @@ class AutoComboBox extends JComboBox<Object> {
 
 	public void setDataList(List<Object> list) {
 		autoTextFieldEditor.getAutoTextFieldEditor().setDataList(list);
-		setModel(new DefaultComboBoxModel<Object>(list.toArray()));
+		setModel(new DefaultComboBoxModel<>(list.toArray()));
 	}
 
 	void setSelectedValue(Object obj) {
-		if (isFired) {
-			return;
-		} else {
+		if (!isFired) {
 			isFired = true;
 			setSelectedItem(obj);
 			fireItemStateChanged(new ItemEvent(this, 701, selectedItemReminder, 1));
 			isFired = false;
-			return;
 		}
 	}
 
+	@Override
 	protected void fireActionEvent() {
 		if (!isFired)
 			super.fireActionEvent();

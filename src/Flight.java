@@ -31,7 +31,6 @@ public class Flight {
 	 * @param departureTime
 	 * @param arrivalTime
 	 * @param duration
-	 * @param millage
 	 */
 	public Flight(int flightNumber, String price, String airLine, String origin, String destination, String originTerminal,
 			String destinationTerminal, String departureTime, String arrivalTime, int duration, int mileage) {
