@@ -34,7 +34,6 @@ public class App {
      * Create the application.
      */
     public App() {
-        setFonts();
         initialize();
     }
 
@@ -42,6 +41,8 @@ public class App {
      * Initialize the contents of the frame.
      */
     private void initialize() {
+		ConnectDatabase.setup();
+    	setFonts();
         BorderLayout borderLayout = new BorderLayout();
         borderLayout.setVgap(10);
         borderLayout.setHgap(10);

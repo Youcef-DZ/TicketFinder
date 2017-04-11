@@ -63,7 +63,6 @@ public class SearchResults extends JFrame {
 		dtm.setRowCount(0); // clear table if previous results are there
 		List<TripOption> tripResults = s.getResults();
 		if (tripResults != null) {
-			ConnectDatabase cb = new ConnectDatabase();
 
 			tripResults.forEach(tripOption -> { // using lambda expression
 				Flight tempFlight = new Flight();
@@ -81,7 +80,7 @@ public class SearchResults extends JFrame {
 						String flightCarrier = flightInfo.getCarrier();
 
 						tempFlight.setFlightNumber(Integer.parseInt(flightNum));
-						tempFlight.setAirLine(cb.getAirlineName(flightCarrier));
+						tempFlight.setAirLine(ConnectDatabase.getAirlineName(flightCarrier));
 
 						List<LegInfo> leg = segIn.getLeg();
 

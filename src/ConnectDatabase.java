@@ -10,16 +10,19 @@ import java.util.Map;
 
 public class ConnectDatabase {
 	// Name, IATAkey map
-	private Map<String, String> locations = new HashMap<>();
+	private static Map<String, String> locations = new HashMap<>();
 	// Code, Airline Name map
-	private Map<String, String> airlines = new HashMap<>();
+	private static Map<String, String> airlines = new HashMap<>();
 
-	Statement stmt = null;
-	ResultSet result2;
-	int result = 0;
+	private static Statement stmt = null;
+	private static ResultSet result2;
+	// private int result = 0;
 
-	public ConnectDatabase() {
-
+	/**
+	 *  Database setup
+	 *  Shall be called once only
+	 */
+	public static void setup() {
 		try {
 			Class.forName("org.hsqldb.jdbc.JDBCDriver");
 			Connection con = DriverManager.getConnection("jdbc:hsqldb:file:./db/AppDB", "sa", "");
@@ -40,10 +43,7 @@ public class ConnectDatabase {
 
 			result2 = stmt.executeQuery("SELECT IATA, TYPE, NAME, PARENT_NAME FROM CITIES");
 			while (result2.next()) {
-				if (!result2.getString("TYPE").equals("country")) { // do not
-																	// search
-																	// between
-																	// countries
+				if (!result2.getString("TYPE").equals("country")) { // do not add countries
 					String iata = result2.getString("IATA");
 					String name = result2.getString("NAME");
 					locations.put(name, iata);
@@ -53,21 +53,21 @@ public class ConnectDatabase {
 			e.printStackTrace();
 		}
 
-		System.out.println("DONE!");
+		System.out.println("DB SETUP DONE!");
 	}
 
-	public List<Object> getNames() {
+	public static List<Object> getNames() {
 		return Arrays.asList(locations.keySet().parallelStream().sorted().toArray());
 		//Object[] a = locations.keySet().toArray();
 		//Arrays.sort(a);
 		//return Arrays.asList(a);
 	}
 
-	public String getIATAKey(String name) {
+	public static String getIATAKey(String name) {
 		return locations.get(name);
 	}
 
-	public String getAirlineName(String code) {
+	public static String getAirlineName(String code) {
 		return airlines.get(code);
 	}
 }

@@ -39,7 +39,7 @@ public class SearchPanel extends JPanel {
 	private final JLabel lblFrom = new JLabel("From:");
 	private final JLabel lblReturn = new JLabel("Return: ");
 	private final JLabel lblTo = new JLabel("To:");
-	
+
 	private final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 	private final JCheckBox chckbxNonstopOnly = new JCheckBox("Non-stop only");
 	private final JButton btnSearch = new JButton("\tSearch\t");
@@ -62,8 +62,6 @@ public class SearchPanel extends JPanel {
 	private final JLabel lblMaxStops = new JLabel("Max Stops:");
 	private final JLabel lblSenior = new JLabel("Senior:");
 	private final JLabel lblInfantInLap = new JLabel("Infant In Lap:");
-
-	ConnectDatabase cb = new ConnectDatabase();
 
 	private final JComboBox<?> adultNcomboBox = new JComboBox<Object>(numbers);
 	private final JComboBox<?> seniorNcomboBox = new JComboBox<Object>(numbers);
@@ -301,45 +299,44 @@ public class SearchPanel extends JPanel {
 
 		departureDatePicker.setCalendar(cal);
 
-		Timeit.code(() -> {
+		List<Object> airportsList = ConnectDatabase.getNames();
+			
+		AutoComboBox airportsCB = new AutoComboBox(airportsList);
 
-			List<Object> airportsList = cb.getNames();
-			AutoComboBox airportsCB = new AutoComboBox(airportsList);
+		Dimension d = new Dimension(700, 60);
 
-			Dimension d = new Dimension(700, 60);
+		toTextField = new AutoTextField(airportsList, airportsCB);
+		toTextField.setAlignmentX(Component.RIGHT_ALIGNMENT);
+		toTextField.setMaximumSize(d);
 
-			toTextField = new AutoTextField(airportsList, airportsCB);
-			toTextField.setAlignmentX(Component.RIGHT_ALIGNMENT);
-			toTextField.setMaximumSize(d);
+		topPanel.setLayout(new GridLayout(0, 1, 0, 5));
 
-			topPanel.setLayout(new GridLayout(0, 1, 0, 5));
+		Box topBox = Box.createVerticalBox();
+		fromTextField = new AutoTextField(airportsList, airportsCB);
+		fromTextField.setAlignmentX(Component.RIGHT_ALIGNMENT);
+		fromTextField.setMaximumSize(d);
 
-			Box topBox = Box.createVerticalBox();
-			fromTextField = new AutoTextField(airportsList, airportsCB);
-			fromTextField.setAlignmentX(Component.RIGHT_ALIGNMENT);
-			fromTextField.setMaximumSize(d);
+		Box fromBox = Box.createHorizontalBox();
+		fromBox.setAlignmentX(Component.LEFT_ALIGNMENT);
+		fromBox.setAlignmentY(Component.CENTER_ALIGNMENT);
+		lblFrom.setAlignmentX(Component.CENTER_ALIGNMENT);
+		fromBox.add(lblFrom);
+		fromBox.add(Box.createHorizontalStrut(57));
+		fromBox.add(fromTextField);
 
-			Box fromBox = Box.createHorizontalBox();
-			fromBox.setAlignmentX(Component.LEFT_ALIGNMENT);
-			fromBox.setAlignmentY(Component.CENTER_ALIGNMENT);
-			lblFrom.setAlignmentX(Component.CENTER_ALIGNMENT);
-			fromBox.add(lblFrom);
-			fromBox.add(Box.createHorizontalStrut(57));
-			fromBox.add(fromTextField);
+		Box toBox = Box.createHorizontalBox();
+		toBox.setAlignmentX(Component.LEFT_ALIGNMENT);
+		toBox.setAlignmentY(Component.CENTER_ALIGNMENT);
+		toBox.add(lblTo);
+		toBox.add(Box.createHorizontalStrut(90));
+		toBox.add(toTextField);
 
-			Box toBox = Box.createHorizontalBox();
-			toBox.setAlignmentX(Component.LEFT_ALIGNMENT);
-			toBox.setAlignmentY(Component.CENTER_ALIGNMENT);
-			toBox.add(lblTo);
-			toBox.add(Box.createHorizontalStrut(90));
-			toBox.add(toTextField);
+		topBox.add(fromBox);
+		topBox.add(Box.createVerticalStrut(10));
+		topBox.add(toBox);
 
-			topBox.add(fromBox);
-			topBox.add(Box.createVerticalStrut(10));
-			topBox.add(toBox);
+		topPanel.add(topBox);
 
-			topPanel.add(topBox);
-		});
 		Box box = Box.createHorizontalBox();
 		box.add(lblDeparture);
 		int strut = 25;
@@ -407,11 +404,11 @@ public class SearchPanel extends JPanel {
 	}
 
 	public String getDepartureAirport() {
-		return cb.getIATAKey(fromTextField.getText());
+		return ConnectDatabase.getIATAKey(fromTextField.getText());
 	}
 
 	public String getDestinationAirport() {
-		return cb.getIATAKey(toTextField.getText());
+		return ConnectDatabase.getIATAKey(toTextField.getText());
 	}
 
 }
