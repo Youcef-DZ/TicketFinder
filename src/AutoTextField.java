@@ -8,6 +8,13 @@ import javax.swing.text.PlainDocument;
 import java.awt.event.ItemEvent;
 import java.util.List;
 
+/*
+This file was produced by MathiasLoewe
+https://github.com/MathiasLoewe/Awesomemap/blob/master/src/gui/AutoTextField.java
+
+I have edited it to suit my needs on this App
+*/
+
 class AutoTextField extends JTextField {
 	/**
 	 * 
