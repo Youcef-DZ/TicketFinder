@@ -3,9 +3,7 @@ import com.google.api.services.qpxExpress.model.*;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.UIManager;
@@ -52,14 +50,15 @@ public class SearchResults extends JFrame {
 		table.setModel(dtm);
 
 		JTableHeader header = table.getTableHeader();
-		header.setFont(new Font("Dialog", Font.BOLD, 18));
+		header.setFont(new Font("Dialog", Font.BOLD, 20));
 
 		table.setFillsViewportHeight(true);
-		table.setFont(new Font("Arial", Font.PLAIN, 20));
-		table.setRowHeight(30);
+		table.setFont(new Font("Arial", Font.PLAIN, 24));
+		table.setRowHeight(40);
 
 		table.getColumnModel().getColumn(5).setCellRenderer(new ButtonRenderer());
 		table.getColumnModel().getColumn(5).setCellEditor(new TableRenderer(new JCheckBox()));
+		table.getColumnModel().removeColumn(table.getColumnModel().getColumn(6) ); // hide 6th column
 		table.setPreferredScrollableViewportSize(table.getPreferredSize());
 		table.setShowHorizontalLines(true);
 		table.setShowVerticalLines(false);
@@ -130,8 +129,12 @@ public class SearchResults extends JFrame {
 					tempFlight.setPrice(price);
 
 					// add flight to table
-					dtm.addRow(new Object[] { tempFlight.getAirLineName(), tempFlight.getOrigin(),
-							tempFlight.getDestination(), tempFlight.getDuration(), tempFlight.getPrice(), "Details" });
+					dtm.addRow(new Object[] { 
+							tempFlight.getAirLineName(), 
+							tempFlight.getOrigin(),
+							tempFlight.getDestination(),
+							tempFlight.getDuration(), 
+							tempFlight.getPrice(), "Details" , tempFlight});
 				});
 
 			});
@@ -147,10 +150,10 @@ public class SearchResults extends JFrame {
  * 
  * @author Youcef
  * 
- * Code below was originated from user Bitmap at:
- * http://stackoverflow.com/a/10348919/3850242
+ *         Code below was originated from user Bitmap at:
+ *         http://stackoverflow.com/a/10348919/3850242
  * 
- * I have optimized it to suit JTable needs on 4/12/2017
+ *         I have optimized it to suit my JTable needs on 4/12/2017
  *
  */
 class ButtonRenderer extends JButton implements TableCellRenderer {
@@ -193,7 +196,6 @@ class TableRenderer extends DefaultCellEditor {
 	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
 		this.table = table;
 		this.row = row;
-
 		button.setForeground(Color.black);
 		button.setBackground(UIManager.getColor("Button.background"));
 		label = (value == null) ? "" : value.toString();
@@ -204,8 +206,9 @@ class TableRenderer extends DefaultCellEditor {
 
 	public Object getCellEditorValue() {
 		if (clicked) {
-			new FlightDetailsDialog();
-			//JOptionPane.showMessageDialog(button, "Column with Value: " + table.getValueAt(row, 1) + " -  Clicked!");
+			Flight selectedFlight = (Flight) table.getModel().getValueAt(row, 6);
+
+			new FlightDetailsDialog(selectedFlight);
 		}
 		clicked = false;
 		return new String(label);
