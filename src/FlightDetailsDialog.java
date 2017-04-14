@@ -1,54 +1,82 @@
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JPanel;
+import javax.swing.*;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.EmptyBorder;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-
+import java.awt.*;
 
 /**
  * @author Youcef Laidi
- *
  */
 public class FlightDetailsDialog extends JDialog {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	private final JPanel contentPanel = new JPanel();
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * Create the dialog.
-	 */
-	public FlightDetailsDialog() {
-		setBounds(100, 100, 450, 300);
-		setVisible(true);
-		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+    /**
+     * Create the dialog.
+     */
+    public FlightDetailsDialog(Flight selectedFlight) {
+        setBounds(100, 100, 450, 300);
+        setVisible(true);
+        setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
-		getContentPane().setLayout(new BorderLayout());
-		contentPanel.setLayout(new FlowLayout());
-		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
-		getContentPane().add(contentPanel, BorderLayout.CENTER);
-		{
-			JPanel buttonPane = new JPanel();
-			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
-			getContentPane().add(buttonPane, BorderLayout.SOUTH);
-			{
-				JButton cancelButton = new JButton("Close");
-				cancelButton.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						setVisible(false);
-						dispose();
-					}
-				});
-				cancelButton.setActionCommand("Close");
-				buttonPane.add(cancelButton);
-			}
-		}
-	}
+        getContentPane().setLayout(new BorderLayout());
+        JPanel contentPanel = new JPanel();
+        contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 
+
+        String airline = selectedFlight.getAirLineName();
+        String origin = selectedFlight.getOrigin();
+        //String destination = selectedFlight.getDestination();
+        //int duration = selectedFlight.getDuration();
+        //String price = selectedFlight.getPrice();
+
+        getContentPane().add(contentPanel, BorderLayout.CENTER);
+        JLabel lblairline;
+        {
+            lblairline = new JLabel(airline);
+        }
+
+        JLabel lblDepartdate = new JLabel(selectedFlight.getDepartureTime());
+        JLabel lblDeparturecity = new JLabel(origin);
+        GroupLayout gl_contentPanel = new GroupLayout(contentPanel);
+        gl_contentPanel.setHorizontalGroup(
+                gl_contentPanel.createParallelGroup(Alignment.LEADING)
+                        .addGroup(gl_contentPanel.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(lblairline)
+                                .addPreferredGap(ComponentPlacement.RELATED)
+                                .addComponent(lblDepartdate)
+                                .addPreferredGap(ComponentPlacement.RELATED)
+                                .addComponent(lblDeparturecity)
+                                .addContainerGap(150, Short.MAX_VALUE))
+        );
+        gl_contentPanel.setVerticalGroup(
+                gl_contentPanel.createParallelGroup(Alignment.LEADING)
+                        .addGroup(gl_contentPanel.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE)
+                                        .addComponent(lblairline)
+                                        .addComponent(lblDepartdate)
+                                        .addComponent(lblDeparturecity))
+                                .addContainerGap(159, Short.MAX_VALUE))
+        );
+        contentPanel.setLayout(gl_contentPanel);
+        {
+            JPanel buttonPane = new JPanel();
+            buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
+            getContentPane().add(buttonPane, BorderLayout.SOUTH);
+            {
+                JButton cancelButton = new JButton("Close");
+                cancelButton.addActionListener(e -> {
+                    setVisible(false);
+                    dispose();
+                });
+                cancelButton.setActionCommand("Close");
+                buttonPane.add(cancelButton);
+            }
+        }
+    }
 }

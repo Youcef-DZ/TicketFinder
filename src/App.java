@@ -1,19 +1,19 @@
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
-import java.awt.Font;
-
-import javax.swing.Box;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.UIManager;
+import javax.swing.*;
+import java.awt.*;
 
 /**
  * @author Youcef Laidi
- *
  */
 public class App {
 
     private JFrame frame;
+
+    /**
+     * Create the application.
+     */
+    private App() {
+        initialize();
+    }
 
     /**
      * Launch the application.
@@ -21,28 +21,24 @@ public class App {
      * @param args
      */
     public static void main(String[] args) {
+        /* (non-Javadoc)
+         * @see java.lang.Runnable#run()
+         */
         EventQueue.invokeLater(() -> { // using lambda expression
             try {
                 App window = new App();
                 window.frame.setVisible(true);
-            } catch (Exception e) {
+            } catch (Exception ignored) {
             }
         });
-    }
-
-    /**
-     * Create the application.
-     */
-    public App() {
-        initialize();
     }
 
     /**
      * Initialize the contents of the frame.
      */
     private void initialize() {
-		ConnectDatabase.setup();
-    	setFonts();
+        ConnectDatabase.setup();
+        setFonts();
         BorderLayout borderLayout = new BorderLayout();
         borderLayout.setVgap(10);
         borderLayout.setHgap(10);
@@ -56,7 +52,7 @@ public class App {
         frame.getContentPane().setLayout(borderLayout);
         frame.getContentPane().add(horizontalBox, BorderLayout.CENTER);
         frame.pack();
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
 
     /**
