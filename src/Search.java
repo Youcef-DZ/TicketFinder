@@ -4,20 +4,30 @@ import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.qpxExpress.QPXExpress;
 import com.google.api.services.qpxExpress.QPXExpressRequestInitializer;
-import com.google.api.services.qpxExpress.model.*;
+import com.google.api.services.qpxExpress.model.PassengerCounts;
+import com.google.api.services.qpxExpress.model.SliceInput;
+import com.google.api.services.qpxExpress.model.TripOptionsRequest;
+import com.google.api.services.qpxExpress.model.TripsSearchRequest;
+import com.google.api.services.qpxExpress.model.TripsSearchResponse;
 
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.*;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 public class Search {
     private static final String APPLICATION_NAME = "FlightSearch";
-    private static final String API_KEY = "AIzaSyAAhBNyRBLs9wddu7DybARnFi6vZTvFGqI";
+    //private static final String API_KEY = "AIzaSyAAhBNyRBLs9wddu7DybARnFi6vZTvFGqI";
     private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
-    //private static final String API_KEY = "AIzaSyCtmM90gvKkOFzG1D5DUPWfXPz5lKzxAik";
+    private static final String API_KEY = "AIzaSyCtmM90gvKkOFzG1D5DUPWfXPz5lKzxAik";
     private static HttpTransport httpTransport;
-    private static Future<List<TripOption>> future;
+    private static Future<TripsSearchResponse> future;
     // legs, in minutes
     private final int solutions; // he number of solutions to return, maximum
     private String departure; // Airport or city IATA designator of the origin.
@@ -31,8 +41,7 @@ public class Search {
     private int infantInSeatCount;
     private int seniorCount;
     private int maxStops;
-    private final int maxConnectionDuration; // The longest connection between two
-    // 500
+    private final int maxConnectionDuration; // The longest connection between two 500
     private final List<String> permittedCarrier; // A list of 2-letter IATA airline
     // designators.
     private final List<String> prohibitedCarrier; // A list of 2-letter IATA airline
@@ -40,7 +49,6 @@ public class Search {
     // designators. Exclude slices that
     // use these carriers.
     private String preferredCabin; // Allowed values are COACH, PREMIUM_COACH,
-    private List<TripOption> tripResults;
 
     /**
      * Default constructor will set the default values for the search
@@ -64,7 +72,7 @@ public class Search {
      */
     public void startSearch() {
         ExecutorService executor = Executors.newSingleThreadExecutor();
-        Callable<List<TripOption>> callable;
+        Callable<TripsSearchResponse> callable;
 
         /*
          * (non-Javadoc)
@@ -111,15 +119,14 @@ public class Search {
                     .setApplicationName(APPLICATION_NAME)
                     .setGoogleClientRequestInitializer(new QPXExpressRequestInitializer(API_KEY)).build();
             TripsSearchResponse list = qpXExpress.trips().search(parameters).execute();
-            tripResults = list.getTrips().getTripOption();
-            return tripResults;
+            return list;
         };
 
         future = executor.submit(callable);
         executor.shutdown();
     }
 
-    List<TripOption> getResults() {
+    TripsSearchResponse getResults() {
         try {
             return future.get(20, TimeUnit.SECONDS);
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
