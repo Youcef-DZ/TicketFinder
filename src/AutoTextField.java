@@ -4,6 +4,9 @@ import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
 import java.awt.event.ItemEvent;
+import static java.awt.event.ItemEvent.SELECTED;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
 import java.util.List;
 
 /*
@@ -13,7 +16,6 @@ https://github.com/MathiasLoewe/Awesomemap/blob/master/src/gui/AutoTextField.jav
 I have edited it to suit my needs on this App
 */
 
-@SuppressWarnings("AppEngineForbiddenCode")
 class AutoTextField extends JTextField {
     /**
      *
@@ -61,8 +63,8 @@ class AutoTextField extends JTextField {
         AutoDocument _lb = (AutoDocument) getDocument();
         if (_lb != null)
             try {
-                int i = Math.min(getCaret().getDot(), getCaret().getMark());
-                int j = Math.max(getCaret().getDot(), getCaret().getMark());
+                int i = min(getCaret().getDot(), getCaret().getMark());
+                int j = max(getCaret().getDot(), getCaret().getMark());
                 _lb.replace(i, j - i, s, null);
             } catch (BadLocationException ignored) {
             }
@@ -96,7 +98,6 @@ class AutoTextField extends JTextField {
         }
     }
 
-    @SuppressWarnings("AppEngineForbiddenCode")
     class AutoDocument extends PlainDocument {
 
         private static final long serialVersionUID = 1L;
@@ -153,18 +154,16 @@ class AutoTextField extends JTextField {
     }
 }
 
-@SuppressWarnings("ALL")
 class AutoComboBox extends JComboBox<Object> {
     /**
      *
      */
     private static final long serialVersionUID = 1L;
-    private final AutoTextFieldEditor autoTextFieldEditor;
     private boolean isFired;
 
     public AutoComboBox(List<Object> airportsList) {
         isFired = false;
-        autoTextFieldEditor = new AutoTextFieldEditor(airportsList);
+        AutoTextFieldEditor autoTextFieldEditor = new AutoTextFieldEditor(airportsList);
         setEditable(true);
         setModel(new DefaultComboBoxModel<Object>(airportsList.toArray()) {
 
@@ -187,7 +186,7 @@ class AutoComboBox extends JComboBox<Object> {
         if (!isFired) {
             isFired = true;
             setSelectedItem(obj);
-            fireItemStateChanged(new ItemEvent(this, 701, selectedItemReminder, ItemEvent.SELECTED));
+            fireItemStateChanged(new ItemEvent(this, 701, selectedItemReminder, SELECTED));
             isFired = false;
         }
     }
@@ -202,10 +201,6 @@ class AutoComboBox extends JComboBox<Object> {
 
         AutoTextFieldEditor(List<Object> airportsList) {
             editor = new AutoTextField(airportsList, AutoComboBox.this);
-        }
-
-        private AutoTextField getAutoTextFieldEditor() {
-            return (AutoTextField) editor;
         }
     }
 
