@@ -1,4 +1,7 @@
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -18,7 +21,7 @@ class ConnectDatabase {
      
         try {
             Class.forName("org.hsqldb.jdbc.JDBCDriver");
-            Connection con = DriverManager.getConnection("jdbc:hsqldb:file:./db/AppDB", "sa", "");
+            Connection con = java.sql.DriverManager.getConnection("jdbc:hsqldb:file:./db/AppDB", "sa", "");
             Statement stmt = con.createStatement();
 
             ResultSet resultSet = stmt.executeQuery("SELECT CODE, NAME FROM AIRLINES");
