@@ -3,151 +3,439 @@
  */
 
 public class Flight {
-    private int flightNumber;
-    private String price;
-    private String airLineCode;
-    private String origin;
-    private String destination;
-    private String departureTime;
-    private String arrivalTime;
-    private int duration;
-    private int mileage;
+	
+	private String aircraft;
+	private String originAirportCode;
+	private String destinationAirportCode;
+	private String originAirportName;
+	private String destinationAirportName;
 
-    public Flight() {
+	private String originCityName;
+	private String destinationCityName;
+	
+	private String departureDate;
 
-    }
+	private String departureTime;
+	private String arrivalDate;
+	private String arrivalTime;
+	private String originTerminal;
+	private String destinationTerminal;
 
-    /**
-     * @param flightNumber
-     * @param price
-     * @param airLine
-     * @param origin
-     * @param destination
-     * @param originTerminal
-     * @param destinationTerminal
-     * @param departureTime
-     * @param arrivalTime
-     * @param duration
-     */
-    public Flight(int flightNumber, String price, String airLine, String origin, String destination, String originTerminal,
-                  String destinationTerminal, String departureTime, String arrivalTime, int duration, int mileage) {
+	private String price;
+	private String airLineCode;
+	private String airLineName;
+	private String cabin;
+	
+	private int duration;
+	private int mileage;
+	private int flightNumber;
 
-        this.flightNumber = flightNumber;
-        this.price = price;
-        this.airLineCode = airLine;
-        this.origin = origin;
-        this.destination = destination;
-        String originTerminal1 = originTerminal;
-        String destinationTerminal1 = destinationTerminal;
-        this.departureTime = departureTime;
-        this.arrivalTime = arrivalTime;
-        this.duration = duration;
-        this.mileage = mileage;
+	private int adultCount;
+	private int childCount;
+	private int infantInLapCount;
+	private int infantInSeatCount;
+	private int seniorCount;
 
-    }
+	/**
+	 * Default constructor 
+	 */
+	public Flight() {
 
-    /**
-     * @param flightNumber the flightNumber to set
-     */
-    public void setFlightNumber(int flightNumber) {
-        this.flightNumber = flightNumber;
-    }
+	}
 
-    /**
-     * @return the price
-     */
-    public String getPrice() {
-        return "$" + price.substring(3);
-    }
+	/**
+	 * @return the arrivalDate
+	 */
+	public String getArrivalDate() {
+		return arrivalDate;
+	}
 
-    /**
-     * @param price the price to set
-     */
-    public void setPrice(String price) {
-        this.price = price;
-    }
+	/**
+	 * @param arrivalDate
+	 *            the arrivalDate to set
+	 */
+	public void setArrivalDate(String arrivalDate) {
+		this.arrivalDate = arrivalDate;
+	}
 
-    /**
-     * @param airLine the airLineCode to set
-     */
-    public void setAirLine(String airLine) {
-        this.airLineCode = airLine;
-    }
+	/**
+	 * @param aircraft
+	 *            the aircraft to set
+	 */
+	public void setAircraft(String aircraft) {
+		this.aircraft = aircraft;
+	}
 
-    /**
-     * @return the airLine
-     */
-    public String getAirLineName() {
-        return airLineCode;
-    }
+	/**
+	 * @param originTerminal
+	 *            the originTerminal to set
+	 */
+	public void setOriginTerminal(String originTerminal) {
+		this.originTerminal = originTerminal;
+	}
 
-    /**
-     * @return the origin
-     */
-    public String getOrigin() {
-        return origin;
-    }
+	/**
+	 * @param destinationTerminal
+	 *            the destinationTerminal to set
+	 */
+	public void setDestinationTerminal(String destinationTerminal) {
+		this.destinationTerminal = destinationTerminal;
+	}
 
-    /**
-     * @param origin the origin to set
-     */
-    public void setOrigin(String origin) {
-        this.origin = origin;
-    }
+	/**
+	 * @param airLineName
+	 *            the airLineName to set
+	 */
+	public void setAirLineName(String airLineName) {
+		this.airLineName = airLineName;
+	}
 
-    /**
-     * @return the destination
-     */
-    public String getDestination() {
-        return destination;
-    }
+	/**
+	 * @return airLineName
+	 */
+	public String setAirLineName() {
+		return airLineName;
+	}
+	
+	/**
+	 * @return the originCityName
+	 */
+	public String getOriginCityName() {
+		return originCityName;
+	}
 
-    /**
-     * @param destination the destination to set
-     */
-    public void setDestination(String destination) {
-        this.destination = destination;
-    }
+	/**
+	 * @param originCityName the originCityName to set
+	 */
+	public void setOriginCityName(String originCityName) {
+		this.originCityName = originCityName;
+	}
 
-    /**
-     * @return the departureTime
-     */
-    public String getDepartureTime() {
-        return departureTime;
-    }
+	/**
+	 * @return the destinationCityName
+	 */
+	public String getDestinationCityName() {
+		return destinationCityName;
+	}
 
-    /**
-     * @param departureTime the departureTime to set
-     */
-    public void setDepartureTime(String departureTime) {
-        this.departureTime = departureTime;
-    }
+	/**
+	 * @param destinationCityName the destinationCityName to set
+	 */
+	public void setDestinationCityName(String destinationCityName) {
+		this.destinationCityName = destinationCityName;
+	}
 
-    /**
-     * @param arrivalTime the arrivalTime to set
-     */
-    public void setArrivalTime(String arrivalTime) {
-        this.arrivalTime = arrivalTime;
-    }
 
-    /**
-     * @return the duration
-     */
-    public int getDuration() {
-        return duration;
-    }
+	/**
+	 * @return the originCode
+	 */
+	public String getOriginAirportCode() {
+		return originAirportCode;
+	}
 
-    /**
-     * @param duration the duration to set
-     */
-    public void setDuration(int duration) {
-        this.duration = duration;
-    }
+	/**
+	 * @param originCode
+	 *            the originCode to set
+	 */
+	public void setOriginAirportCode(String originCode) {
+		this.originAirportCode = originCode;
+	}
 
-    /**
-     * @param mileage the mileage to set
-     */
-    public void setMileage(int mileage) {
-        this.mileage = mileage;
-    }
+	/**
+	 * @return the destinationCode
+	 */
+	public String getDestinationAirportCode() {
+		return destinationAirportCode;
+	}
+
+	/**
+	 * @param destinationCode
+	 *            the destinationCode to set
+	 */
+	public void setDestinationAirportCode(String destinationCode) {
+		this.destinationAirportCode = destinationCode;
+	}
+
+	/**
+	 * @return the originName
+	 */
+	public String getOriginAirportName() {
+		return originAirportName;
+	}
+
+	/**
+	 * @param originName
+	 *            the originName to set
+	 */
+	public void setOriginAirportName(String originName) {
+		this.originAirportName = originName;
+	}
+
+	/**
+	 * @return the destinationName
+	 */
+	public String getDestinationAirportName() {
+		return destinationAirportName;
+	}
+
+	/**
+	 * @param destinationName
+	 *            the destinationName to set
+	 */
+	public void setDestinationAirportName(String destinationName) {
+		this.destinationAirportName = destinationName;
+	}
+
+	/**
+	 * @return the departureDate
+	 */
+	public String getDepartureDate() {
+		return departureDate;
+	}
+
+	/**
+	 * @param departureDate
+	 *            the departureDate to set
+	 */
+	public void setDepartureDate(String departureDate) {
+		this.departureDate = departureDate;
+	}
+
+	/**
+	 * @return the airLineCode
+	 */
+	public String getAirLineCode() {
+		return airLineCode;
+	}
+
+	/**
+	 * @param airLineCode
+	 *            the airLineCode to set
+	 */
+	public void setAirLineCode(String airLineCode) {
+		this.airLineCode = airLineCode;
+	}
+
+	/**
+	 * @return the cabin
+	 */
+	public String getCabin() {
+		return cabin;
+	}
+
+	/**
+	 * @param cabin
+	 *            the cabin to set
+	 */
+	public void setCabin(String cabin) {
+		this.cabin = cabin;
+	}
+
+	/**
+	 * @return the adultCount
+	 */
+	public int getAdultCount() {
+		return adultCount;
+	}
+
+	/**
+	 * @param adultCount
+	 *            the adultCount to set
+	 */
+	public void setAdultCount(int adultCount) {
+		this.adultCount = adultCount;
+	}
+
+	/**
+	 * @return the childCount
+	 */
+	public int getChildCount() {
+		return childCount;
+	}
+
+	/**
+	 * @param childCount
+	 *            the childCount to set
+	 */
+	public void setChildCount(int childCount) {
+		this.childCount = childCount;
+	}
+
+	/**
+	 * @return the infantInLapCount
+	 */
+	public int getInfantInLapCount() {
+		return infantInLapCount;
+	}
+
+	/**
+	 * @param infantInLapCount
+	 *            the infantInLapCount to set
+	 */
+	public void setInfantInLapCount(int infantInLapCount) {
+		this.infantInLapCount = infantInLapCount;
+	}
+
+	/**
+	 * @return the infantInSeatCount
+	 */
+	public int getInfantInSeatCount() {
+		return infantInSeatCount;
+	}
+
+	/**
+	 * @param infantInSeatCount
+	 *            the infantInSeatCount to set
+	 */
+	public void setInfantInSeatCount(int infantInSeatCount) {
+		this.infantInSeatCount = infantInSeatCount;
+	}
+
+	/**
+	 * @return the seniorCount
+	 */
+	public int getSeniorCount() {
+		return seniorCount;
+	}
+
+	/**
+	 * @param seniorCount
+	 *            the seniorCount to set
+	 */
+	public void setSeniorCount(int seniorCount) {
+		this.seniorCount = seniorCount;
+	}
+
+	/**
+	 * @return the arrivalTime
+	 */
+	public String getArrivalTime() {
+		return arrivalTime;
+	}
+
+	/**
+	 * @return the destinationTerminal
+	 */
+	public String getDestinationTerminal() {
+		return destinationTerminal;
+	}
+
+	/**
+	 * @return the mileage
+	 */
+	public int getMileage() {
+		return mileage;
+	}
+
+	/**
+	 * @return the flightNumber
+	 */
+	public int getFlightNumber() {
+		return flightNumber;
+	}
+
+	/**
+	 * @param flightNumber
+	 *            the flightNumber to set
+	 */
+	public void setFlightNumber(int flightNumber) {
+		this.flightNumber = flightNumber;
+	}
+
+	/**
+	 * @return the price
+	 */
+	public String getPrice() {
+		return "$" + price.substring(3);
+	}
+
+	/**
+	 * @param price
+	 *            the price to set
+	 */
+	public void setPrice(String price) {
+		this.price = price;
+	}
+
+	/**
+	 * @param airLine
+	 *            the airLineCode to set
+	 */
+	public void setAirLine(String airLine) {
+		this.airLineCode = airLine;
+	}
+
+	/**
+	 * @return the airLine
+	 */
+	public String getAirLineName() {
+		return airLineCode;
+	}
+
+	/**
+	 * @return the departureTime
+	 */
+	public String getDepartureTime() {
+		return departureTime;
+	}
+
+	/**
+	 * @param departureTime
+	 *            the departureTime to set
+	 */
+	public void setDepartureTime(String departureTime) {
+		this.departureTime = departureTime;
+	}
+
+	/**
+	 * @param arrivalTime
+	 *            the arrivalTime to set
+	 */
+	public void setArrivalTime(String arrivalTime) {
+		this.arrivalTime = arrivalTime;
+	}
+
+	/**
+	 * @return the duration
+	 */
+	public int getDuration() {
+		return duration;
+	}
+
+	/**
+	 * @param duration
+	 *            the duration to set
+	 */
+	public void setDuration(int duration) {
+		this.duration = duration;
+	}
+
+	/**
+	 * @param mileage
+	 *            the mileage to set
+	 */
+	public void setMileage(int mileage) {
+		this.mileage = mileage;
+	}
+
+	/**
+	 * @return the aircraft
+	 */
+	public String getAircraft() {
+		return aircraft;
+	}
+
+	/**
+	 * @return the origin Terminal
+	 */
+	public String getOriginTerminal() {
+		return originTerminal;
+	}
+
+	/**
+	 * @return the destination Terminal
+	 */
+	public String getDestTerminal() {
+		return destinationTerminal;
+	}
 }
