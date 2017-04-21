@@ -1,8 +1,14 @@
-import javax.swing.*;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.LayoutStyle.ComponentPlacement;
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+
+import javax.swing.GroupLayout;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.LayoutStyle;
 import javax.swing.border.EmptyBorder;
-import java.awt.*;
+
 
 /**
  * @author Youcef Laidi
@@ -20,15 +26,14 @@ public class FlightDetailsDialog extends JDialog {
     public FlightDetailsDialog(Flight selectedFlight) {
         setBounds(100, 100, 450, 300);
         setVisible(true);
-        setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
         getContentPane().setLayout(new BorderLayout());
         JPanel contentPanel = new JPanel();
         contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 
-
         String airline = selectedFlight.getAirLineName();
-        String origin = selectedFlight.getOrigin();
+        String origin = selectedFlight.getOriginAirportName();
         //String destination = selectedFlight.getDestination();
         //int duration = selectedFlight.getDuration();
         //String price = selectedFlight.getPrice();
@@ -42,22 +47,20 @@ public class FlightDetailsDialog extends JDialog {
         JLabel lblDepartdate = new JLabel(selectedFlight.getDepartureTime());
         JLabel lblDeparturecity = new JLabel(origin);
         GroupLayout gl_contentPanel = new GroupLayout(contentPanel);
-        gl_contentPanel.setHorizontalGroup(
-                gl_contentPanel.createParallelGroup(Alignment.LEADING)
+        gl_contentPanel.setHorizontalGroup(gl_contentPanel.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addGroup(gl_contentPanel.createSequentialGroup()
                                 .addContainerGap()
                                 .addComponent(lblairline)
-                                .addPreferredGap(ComponentPlacement.RELATED)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(lblDepartdate)
-                                .addPreferredGap(ComponentPlacement.RELATED)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(lblDeparturecity)
                                 .addContainerGap(150, Short.MAX_VALUE))
         );
-        gl_contentPanel.setVerticalGroup(
-                gl_contentPanel.createParallelGroup(Alignment.LEADING)
+        gl_contentPanel.setVerticalGroup(gl_contentPanel.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addGroup(gl_contentPanel.createSequentialGroup()
                                 .addContainerGap()
-                                .addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE)
+                                .addGroup(gl_contentPanel.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                         .addComponent(lblairline)
                                         .addComponent(lblDepartdate)
                                         .addComponent(lblDeparturecity))
