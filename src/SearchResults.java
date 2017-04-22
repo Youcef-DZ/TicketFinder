@@ -23,6 +23,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.Toolkit;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -42,23 +43,21 @@ public class SearchResults extends JFrame {
 	private final DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("hh:mm a");
 	private final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("EEE, MMM dd");
 
-
 	private final DefaultTableModel dtm;
-	private Flight tempFlight;
 
 	public SearchResults(Search s) {
-
 		new GridLayout(1, 0);
+		setTitle("Results");
 
-		String[] columnNames = { "Airline", "Departure", "From > To", "Arrival", "Duration", "Price", "Details",
-				"Flight Instance" };
+		String[] columnNames = { "Airline", "Departure", "From > To", "Arrival", "Duration", "# of Stops", "Price",
+				"Details", "Flight Instance" };
 
 		dtm = new DefaultTableModel(0, 0) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			public boolean isCellEditable(int row, int column) {
-				return column == 6;
+				return column == 7;
 			}
 		};
 
@@ -74,9 +73,9 @@ public class SearchResults extends JFrame {
 		table.setFont(new Font("Arial", Font.PLAIN, 24));
 		table.setRowHeight(40);
 
-		table.getColumnModel().getColumn(6).setCellRenderer(new ButtonRenderer());
-		table.getColumnModel().getColumn(6).setCellEditor(new TableRenderer(new JCheckBox()));
-		table.getColumnModel().removeColumn(table.getColumnModel().getColumn(7));
+		table.getColumnModel().getColumn(7).setCellRenderer(new ButtonRenderer());
+		table.getColumnModel().getColumn(7).setCellEditor(new TableRenderer(new JCheckBox()));
+		table.getColumnModel().removeColumn(table.getColumnModel().getColumn(8));
 		table.setPreferredScrollableViewportSize(table.getPreferredSize());
 		table.setShowHorizontalLines(true);
 		table.setShowVerticalLines(false);
@@ -87,8 +86,8 @@ public class SearchResults extends JFrame {
 		add(scrollPane);
 
 		setVisible(true);
-		setPreferredSize(new Dimension(1050, 700));
-		setTitle("Results");
+		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+		setPreferredSize(new Dimension((int) dim.getWidth() - 100, (int) dim.getHeight() - 100));
 		pack();
 	}
 
@@ -120,17 +119,17 @@ public class SearchResults extends JFrame {
 				 * @see java.util.function.Consumer#accept(java.lang.Object)
 				 */
 				tripResults.forEach(tripOption -> { // using lambda expression
-					tempFlight = new Flight();
 					List<SliceInfo> sliceInfo = tripOption.getSlice();
 					/*
 					 * (non-Javadoc)
 					 * 
 					 * @see java.util.function.Consumer#accept(java.lang.Object)
 					 */
+					Trip tempTrip = new Trip();
 					sliceInfo.forEach(sliceIn -> { // using lambda expression
+						// tempTrip = new Trip();
 						int duration = sliceIn.getDuration();
-
-						tempFlight.setDuration(duration);
+						tempTrip.setTripDuration(duration);
 
 						List<SegmentInfo> segInfo = sliceIn.getSegment();
 						/*
@@ -140,13 +139,16 @@ public class SearchResults extends JFrame {
 						 * java.util.function.Consumer#accept(java.lang.Object)
 						 */
 						segInfo.forEach(segIn -> { // using lambda expression
+							Flight tempFlight = new Flight();
 							// String bookingCode = segIn.getBookingCode();
 							FlightInfo flightInfo = segIn.getFlight();
 							String flightNum = flightInfo.getNumber();
 							String carrierCode = flightInfo.getCarrier();
 							String carrierName = shortCarrierName(carriers.get(carrierCode).getName());
+
 							tempFlight.setFlightNumber(Integer.parseInt(flightNum));
-							tempFlight.setAirLine(carrierName);
+							tempFlight.setAirLineName(carrierName);
+							tempFlight.setAirLineCode(carrierCode);
 
 							List<LegInfo> leg = segIn.getLeg();
 							/*
@@ -159,15 +161,17 @@ public class SearchResults extends JFrame {
 							leg.forEach(l -> { // using lambda expression
 								String departureDate = l.getDepartureTime();
 								String arrivalDate = l.getArrivalTime();
-								
+								int legDuartion = l.getDuration();
+								tempFlight.setDuration(legDuartion);
+
 								ZonedDateTime d = ZonedDateTime.parse(departureDate);
 								String departureTime = d.format(timeFormat);
 								departureDate = d.format(dateFormat);
-								
+
 								d = ZonedDateTime.parse(arrivalDate);
 								String arrivalTime = d.format(timeFormat);
-								arrivalDate = d.format(dateFormat);								
-								
+								arrivalDate = d.format(dateFormat);
+
 								int mil = l.getMileage();
 
 								String aircraft = l.getAircraft();
@@ -182,9 +186,6 @@ public class SearchResults extends JFrame {
 								String destinationAirportName = airports.get(destinationAirportCode).getName();
 								String destinationCityCode = airports.get(destinationAirportCode).getCity();
 								String destinationCityName = cities.get(destinationCityCode).getName();
-
-								// int durationLeg = l.getDuration(); duration
-								// for single flight
 
 								tempFlight.setDestinationTerminal(destTer);
 								tempFlight.setOriginTerminal(originTer);
@@ -201,26 +202,32 @@ public class SearchResults extends JFrame {
 								tempFlight.setOriginAirportName(originAirportName);
 								tempFlight.setMileage(mil);
 							});
+							tempTrip.addFlight(tempFlight);
 						});
-						String price = tripOption.getPricing().get(0).getSaleTotal();
-						tempFlight.setPrice(price);
-
-						// add flight to table
-						dtm.addRow(new Object[] { tempFlight.getAirLineName(), tempFlight.getDepartureTime(),
-								tempFlight.getOriginAirportCode() + " > " + tempFlight.getDestinationAirportCode(),
-								tempFlight.getArrivalTime(), tempFlight.getFormatedDuration(), tempFlight.getPrice(),
-								"FLIGHT DETAILS", tempFlight });
 					});
-
+					String totalPrice = tripOption.getSaleTotal();
+					tempTrip.setTotalPrice(totalPrice);
+					// add flight to table
+					dtm.addRow(new Object[] { tempTrip.getAirLineNames(), 
+							tempTrip.getDepartureTime(),
+							tempTrip.getOriginCityName() + " (" + 
+							tempTrip.getOriginAirportCode() + ") > "
+									+ tempTrip.getDestinationCityName() + " (" + 
+									tempTrip.getDestinationAirportCode()
+									+ ")",
+							tempTrip.getArrivalTime(),
+							tempTrip.getFormatedDuration(), 
+							tempTrip.getNumberOfStops(),
+							tempTrip.getTotalPrice(), "DETAILS", tempTrip });
 				});
 			}
-		}  
-		
-		if(!noResults){
+		}
+
+		if (!noResults) {
 			System.out.println("No results found.");
 			System.out.println("from " + s.getDeparture() + " to " + s.getDestination());
 		}
-		
+
 	}
 
 	/**
@@ -246,7 +253,7 @@ public class SearchResults extends JFrame {
 }
 
 /**
- * @author Youcef 
+ * @author Youcef
  *         <p>
  *         Code below was originated from user Bitmap at:
  *         http://stackoverflow.com/a/10348919/3850242 </br>
@@ -302,8 +309,8 @@ class TableRenderer extends DefaultCellEditor {
 	@Override
 	public Object getCellEditorValue() {
 		if (clicked) {
-			Flight selectedFlight = (Flight) table.getModel().getValueAt(row, 7);
-			new FlightDetailsDialog(selectedFlight);
+			Trip selectedTrip = (Trip) table.getModel().getValueAt(row, 8);
+			new TripDetailsDialog(selectedTrip);
 		}
 		clicked = false;
 		return label;
