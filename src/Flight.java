@@ -25,7 +25,7 @@ public class Flight {
 	private String airLineCode;
 	private String airLineName;
 	private String cabin;
-	
+
 	private int duration;
 	private int mileage;
 	private int flightNumber;
@@ -43,6 +43,15 @@ public class Flight {
 
 	}
 
+	/**
+	 * @return the formatedDuration
+	 */
+	public String getFormatedDuration() {
+		int hours = duration / 60; 
+		int minutes = duration % 60;
+		return hours + "h" + " "+ minutes+"m";
+	}
+	
 	/**
 	 * @return the arrivalDate
 	 */
