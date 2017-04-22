@@ -6,20 +6,19 @@ public class Flight {
 	
 	private String aircraft;
 	private String originAirportCode;
-	private String destinationAirportCode;
 	private String originAirportName;
-	private String destinationAirportName;
-
 	private String originCityName;
+	private String originTerminal;
+	
 	private String destinationCityName;
+	private String destinationAirportCode;
+	private String destinationAirportName;
+	private String destinationTerminal;
 	
 	private String departureDate;
-
 	private String departureTime;
 	private String arrivalDate;
 	private String arrivalTime;
-	private String originTerminal;
-	private String destinationTerminal;
 
 	private String price;
 	private String airLineCode;
@@ -97,13 +96,6 @@ public class Flight {
 	 */
 	public void setAirLineName(String airLineName) {
 		this.airLineName = airLineName;
-	}
-
-	/**
-	 * @return airLineName
-	 */
-	public String setAirLineName() {
-		return airLineName;
 	}
 	
 	/**
@@ -367,18 +359,10 @@ public class Flight {
 	}
 
 	/**
-	 * @param airLine
-	 *            the airLineCode to set
-	 */
-	public void setAirLine(String airLine) {
-		this.airLineCode = airLine;
-	}
-
-	/**
-	 * @return the airLine
+	 * @return the airLineName
 	 */
 	public String getAirLineName() {
-		return airLineCode;
+		return airLineName;
 	}
 
 	/**
