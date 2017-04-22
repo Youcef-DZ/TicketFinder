@@ -16,7 +16,7 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 /**
  * @author Youcef Laidi
  */
-public class FlightDetailsDialog extends JDialog {
+public class TripDetailsDialog extends JDialog {
 
     /**
      *
@@ -27,7 +27,7 @@ public class FlightDetailsDialog extends JDialog {
     /**
      * Create the dialog.
      */
-    public FlightDetailsDialog(Flight selectedFlight) {
+    public TripDetailsDialog(Trip selectedTrip) {
         setBounds(100, 100, 850, 400);
         setVisible(true);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -36,6 +36,7 @@ public class FlightDetailsDialog extends JDialog {
         JPanel contentPanel = new JPanel();
         contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 
+        Flight selectedFlight = selectedTrip.getFlight(0);
         String airline = selectedFlight.getAirLineName();
         String originAirport = selectedFlight.getOriginAirportName();
         String originCityName = selectedFlight.getOriginCityName();
