@@ -10,8 +10,6 @@ import java.util.Map;
 class ConnectDatabase {
     // Name, IATAkey map
     private static final Map<String, String> locations = new HashMap<>();
-    // Code, Airline Name map
-    private static final Map<String, String> airlines = new HashMap<>();
 
     /**
      * Database setup
@@ -22,16 +20,9 @@ class ConnectDatabase {
         try {
             Class.forName("org.hsqldb.jdbc.JDBCDriver");
             Connection con = java.sql.DriverManager.getConnection("jdbc:hsqldb:file:./db/AppDB", "sa", "");
-            Statement stmt = con.createStatement();
+            Statement stmt = con.createStatement();       
 
-            ResultSet resultSet = stmt.executeQuery("SELECT CODE, NAME FROM AIRLINES");
-            while (resultSet.next()) {
-                String code = resultSet.getString("CODE");
-                String name = resultSet.getString("NAME");
-                airlines.put(code, name);
-            }
-
-            resultSet = stmt.executeQuery("SELECT IATA, TYPE, NAME, PARENT_NAME FROM CITIES");
+            ResultSet resultSet = stmt.executeQuery("SELECT IATA, TYPE, NAME, PARENT_NAME FROM CITIES");
             while (resultSet.next()) {
                 if (!resultSet.getString("TYPE").equals("country")) { // do not add countries
                     String iata = resultSet.getString("IATA");
@@ -57,7 +48,4 @@ class ConnectDatabase {
         return locations.get(name);
     }
 
-    public static String getAirlineName(String code) {
-        return airlines.get(code);
-    }
 }
