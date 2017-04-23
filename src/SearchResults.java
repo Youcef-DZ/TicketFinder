@@ -8,6 +8,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
 
+import com.google.api.services.qpxExpress.model.AircraftData;
 import com.google.api.services.qpxExpress.model.AirportData;
 import com.google.api.services.qpxExpress.model.CarrierData;
 import com.google.api.services.qpxExpress.model.CityData;
@@ -111,6 +112,9 @@ public class SearchResults extends JFrame {
 
 			Map<String, CarrierData> carriers = response.getData().getCarrier().stream()
 					.collect(Collectors.toMap(CarrierData::getCode, Function.identity()));
+			
+			Map<String, AircraftData> aircraft = response.getData().getAircraft().stream()
+					.collect(Collectors.toMap(AircraftData::getCode, Function.identity()));
 
 			if (tripResults != null) {
 				/*
@@ -146,7 +150,7 @@ public class SearchResults extends JFrame {
 							String carrierCode = flightInfo.getCarrier();
 							String carrierName = shortCarrierName(carriers.get(carrierCode).getName());
 
-							tempFlight.setFlightNumber(Integer.parseInt(flightNum));
+							tempFlight.setFlightNumber(flightNum);
 							tempFlight.setAirLineName(carrierName);
 							tempFlight.setAirLineCode(carrierCode);
 
@@ -174,7 +178,7 @@ public class SearchResults extends JFrame {
 
 								int mil = l.getMileage();
 
-								String aircraft = l.getAircraft();
+								String aircraftLeg = aircraft.get(l.getAircraft()).getName();
 								String originTer = l.getOriginTerminal();
 								String originAirportCode = l.getOrigin();
 								String originAirportName = airports.get(originAirportCode).getName();
@@ -189,7 +193,7 @@ public class SearchResults extends JFrame {
 
 								tempFlight.setDestinationTerminal(destTer);
 								tempFlight.setOriginTerminal(originTer);
-								tempFlight.setAircraft(aircraft);
+								tempFlight.setAircraft(aircraftLeg);
 								tempFlight.setArrivalTime(arrivalTime);
 								tempFlight.setDepartureTime(departureTime);
 								tempFlight.setArrivalDate(arrivalDate);

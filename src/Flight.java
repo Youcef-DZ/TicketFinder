@@ -27,7 +27,7 @@ public class Flight {
 
 	private int duration;
 	private int mileage;
-	private int flightNumber;
+	private String flightNumber;
 
 	private int adultCount;
 	private int childCount;
@@ -331,16 +331,16 @@ public class Flight {
 	/**
 	 * @return the flightNumber
 	 */
-	public int getFlightNumber() {
+	public String getFlightNumber() {
 		return flightNumber;
 	}
 
 	/**
-	 * @param flightNumber
+	 * @param flightNum
 	 *            the flightNumber to set
 	 */
-	public void setFlightNumber(int flightNumber) {
-		this.flightNumber = flightNumber;
+	public void setFlightNumber(String flightNum) {
+		this.flightNumber = flightNum;
 	}
 
 	/**
