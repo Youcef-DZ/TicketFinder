@@ -75,6 +75,7 @@ public class App {
         UIManager.put("RadioButton.font", font);
         UIManager.put("TextField.font", font);
         UIManager.put("TitledBorder.font", font);
+        UIManager.put("ScrollBar.width", 40);
         UIManager.put("FormattedTextField.font", font);
     }
 
