@@ -4,11 +4,13 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Toolkit;
 
+import javax.swing.Box;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
@@ -34,19 +36,25 @@ public class TripDetailsDialog extends JDialog {
 	 * Create the dialog.
 	 */
 	public TripDetailsDialog(Trip selectedTrip) {
-
-		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-
-		setBounds(100, 100, (int) (dim.getWidth() - 200), 400);
-		setVisible(true);
-		setResizable(false);
-		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-
 		getContentPane().setLayout(new BorderLayout());
-		Flight selectedFlight = selectedTrip.getFlight(0);
 
-		JPanel contentPanel = singleFlightPanel(selectedFlight);
-		getContentPane().add(contentPanel, BorderLayout.CENTER);
+		int numberOfFlights = selectedTrip.getNumberOfFlights();
+
+		Box flightBox = Box.createVerticalBox();
+
+		for (int i = 0; i < numberOfFlights; i++) {
+			Flight selectedFlight = selectedTrip.getFlight(i);
+			JPanel pane = singleFlightPanel(selectedFlight);
+
+			flightBox.add(pane);
+			flightBox.add(Box.createVerticalStrut(10));
+		}
+		
+		   JScrollPane scrollPane = new JScrollPane(flightBox,
+		            JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+		            JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);		
+		   
+		getContentPane().add(scrollPane, BorderLayout.CENTER);
 
 		JPanel buttonPane = new JPanel();
 		buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
@@ -59,6 +67,13 @@ public class TripDetailsDialog extends JDialog {
 		});
 		
 		buttonPane.add(cancelButton);
+		
+		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+
+		setBounds(100, 100, (int) (dim.getWidth() - 200), (int) dim.getHeight() - 200);
+		setVisible(true);
+		//setResizable(false);
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 	}
 
 	/**
