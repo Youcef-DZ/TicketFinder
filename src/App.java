@@ -37,7 +37,7 @@ public class App {
                 window.frame.setVisible(true);
             } catch (Exception ignored) {
             }
-        });
+        }); 
     }
 
     /**
