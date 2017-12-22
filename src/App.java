@@ -31,7 +31,7 @@ public class App {
         /* (non-Javadoc)
          * @see java.lang.Runnable#run()
          */
-        EventQueue.invokeLater(() -> { // using lambda expression
+        EventQueue.invokeLater(() -> {
             try {
                 App window = new App();
                 window.frame.setVisible(true);
