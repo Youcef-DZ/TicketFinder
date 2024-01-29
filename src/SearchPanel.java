@@ -122,7 +122,7 @@ public class SearchPanel extends JPanel {
             if (!childNcomboBox.getSelectedItem().equals(0)) {
                 s.setChildCount(getChildCount());
             }
-            if (!maxPriceTextField.getText().equals("")) {
+            if (!"".equals(maxPriceTextField.getText())) {
                 s.setMaxPrice(getMaxPrice());
             }
             if (maxStopsComboBox.isEnabled() && !maxStopsComboBox.getSelectedItem().equals("")) {

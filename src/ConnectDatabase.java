@@ -24,7 +24,7 @@ class ConnectDatabase {
 
             ResultSet resultSet = stmt.executeQuery("SELECT IATA, TYPE, NAME, PARENT_NAME FROM CITIES");
             while (resultSet.next()) {
-                if (!resultSet.getString("TYPE").equals("country")) { // do not add countries
+                if (!"country".equals(resultSet.getString("TYPE"))) { // do not add countries
                     String iata = resultSet.getString("IATA");
                     String name = resultSet.getString("NAME");
                     locations.put(name, iata);
