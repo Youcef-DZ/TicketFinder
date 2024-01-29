@@ -7,4 +7,3 @@ It would be great improvment to use an alternative API, or even more than one at
 # Use this app
 Change API_KEY string variable in Search.java file to your own key (you can create one at: https://console.developers.google.com/)
 Make sure to add your IP to the whitelist.
-
